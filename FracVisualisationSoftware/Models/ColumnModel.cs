@@ -61,7 +61,7 @@ namespace FracVisualisationSoftware.Models
 
         private void ColumnPathCalculator()
         {
-            //MathUtil.Lerp()
+            //TODO
         }
 
         private double InverseLerp(double x, double a, double b)
