@@ -170,7 +170,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Resources\Ajax Vineyard HZ O Unit 1701LS_Final Svy.xlsx" />
+    <None Include="Resources\FudgedXYZs.xlsx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -20,13 +21,13 @@ namespace FracVisualisationSoftware.ViewModel
 {
     public class ViewportViewModel : ViewModelBase
     {
-        #region variables
+        #region fields
 
-        #region injected variables
+        #region injected fields
 
         private IDialogCoordinator _dialogCoordinator;
 
-        #endregion injected variables
+        #endregion injected fields
 
         private Application _excelApplication;
         private Workbook _excelWorkbook;
@@ -49,7 +50,10 @@ namespace FracVisualisationSoftware.ViewModel
         private string _zColumnHeading; //Northing
         private bool? _zColumnFound;
 
-        #endregion variables
+        private double _tubeLength;
+        private double _tubeDiameter;
+
+        #endregion fields
 
         #region properties
 
@@ -141,6 +145,18 @@ namespace FracVisualisationSoftware.ViewModel
         {
             get { return _zColumnFound; }
             set { _zColumnFound = value; RaisePropertyChanged(() => ZColumnFound); }
+        }
+
+        public double TubeLength
+        {
+            get => _tubeLength;
+            set { _tubeLength = value; RaisePropertyChanged(); }
+        }
+
+        public double TubeDiameter
+        {
+            get => _tubeDiameter;
+            set { _tubeDiameter = value; RaisePropertyChanged(); }
         }
 
         public ObservableCollection<Visual3D> ViewportObjects { get; set; }
@@ -273,10 +289,10 @@ namespace FracVisualisationSoftware.ViewModel
                 progressDialogController.SetMessage("Headings found...");
                 progressDialogController.SetProgress(100);
 
-                App.Current.Dispatcher.BeginInvoke((Action) delegate
-                {
-                    _tubePath.Clear();
-                });
+                App.Current.Dispatcher.BeginInvoke((Action)delegate
+               {
+                   _tubePath.Clear();
+               });
 
                 double initialX = 0;
                 double initialY = 0;
@@ -300,25 +316,25 @@ namespace FracVisualisationSoftware.ViewModel
                     {
                         if (!initalValuesSet)
                         {
-                            initialX = (_excelUsedRange.Cells[currentRow, xColumn.Column].Value2 / 100) * -1;
-                            initialY = (_excelUsedRange.Cells[currentRow, yColumn.Column].Value2 / 100) * -1;
-                            initialZ = (_excelUsedRange.Cells[currentRow, zColumn.Column].Value2 / 100) * -1;
+                            initialX = (_excelUsedRange.Cells[currentRow, xColumn.Column].Value2 / TubeLength) * -1;
+                            initialY = (_excelUsedRange.Cells[currentRow, yColumn.Column].Value2 / TubeLength) * -1;
+                            initialZ = (_excelUsedRange.Cells[currentRow, zColumn.Column].Value2 / TubeLength) * -1;
 
                             initalValuesSet = true;
                         }
 
-                        double x = (_excelUsedRange.Cells[currentRow, xColumn.Column].Value2 / 100) * -1;
-                        double y = (_excelUsedRange.Cells[currentRow, yColumn.Column].Value2 / 100) * -1;
-                        double z = (_excelUsedRange.Cells[currentRow, zColumn.Column].Value2 / 100) * -1;
-
+                        double x = (_excelUsedRange.Cells[currentRow, xColumn.Column].Value2 / TubeLength) * -1;
+                        double y = (_excelUsedRange.Cells[currentRow, yColumn.Column].Value2 / TubeLength) * -1;
+                        double z = (_excelUsedRange.Cells[currentRow, zColumn.Column].Value2 / TubeLength) * -1;
+                        
                         x -= initialX;
                         y -= initialY;
                         z -= initialZ;
 
-                        App.Current.Dispatcher.BeginInvoke((Action) delegate
-                        {
-                            TubePath.Add(new Point3D(x, y, z));
-                        });
+                        App.Current.Dispatcher.BeginInvoke((Action)delegate
+                       {
+                           TubePath.Add(new Point3D(x, y, z));
+                       });
 
                         currentRow++;
                     }
@@ -335,7 +351,7 @@ namespace FracVisualisationSoftware.ViewModel
                     }
 
                     progressDialogController.SetMessage($"Reading row {currentRow} of {numberOfRows}...");
-                    progressDialogController.SetProgress(currentRow);
+                    progressDialogController.SetProgress(currentRow - 1);
                 }
             });
 
@@ -353,7 +369,7 @@ namespace FracVisualisationSoftware.ViewModel
 
             ViewportObjects.Add(new SunLight());
 
-            ViewportObjects.Add(new TubeVisual3D { AddCaps = true, Path = TubePath });
+            ViewportObjects.Add(new TubeVisual3D { AddCaps = true, Path = TubePath, Diameter = TubeDiameter });
         }
 
         #endregion command methods
