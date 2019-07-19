@@ -8,7 +8,7 @@
              xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006">
     <Application.Resources>
         <ResourceDictionary>
-            <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:FracVisualisationSoftware.ViewModel" />
+            <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:FracVisualisationSoftware" />
             <ResourceDictionary.MergedDictionaries>
 
                 <!-- MahApps -->
@@ -27,7 +27,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Flyout.xaml" />
 
-                <ResourceDictionary>
+                <ResourceDictionary x:Name="Colours">
                     <!-- MahApps Brushes -->
                     <SolidColorBrush x:Key="HighlightBrush" Color="{DynamicResource Primary700}"/>
                     <SolidColorBrush x:Key="AccentBaseColorBrush" Color="{DynamicResource Primary600}" />
@@ -48,6 +48,15 @@
                     <SolidColorBrush x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.OnSwitchBrush.Win10" Color="{DynamicResource Primary500}" />
                     <SolidColorBrush x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.OnSwitchMouseOverBrush.Win10" Color="{DynamicResource Primary400}" />
                     <SolidColorBrush x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.ThumbIndicatorCheckedBrush.Win10" Color="{DynamicResource Primary500Foreground}" />
+                </ResourceDictionary>
+
+                <ResourceDictionary x:Name="CommonControlPropertyValues">
+                    <Thickness x:Key="TypicalMargin">5</Thickness>
+                    <Thickness x:Key="GroupBorder">0,1,0,0</Thickness>
+                </ResourceDictionary>
+
+                <ResourceDictionary x:Name="EditorControlsStyles">
+
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

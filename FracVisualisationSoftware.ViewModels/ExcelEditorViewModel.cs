@@ -19,7 +19,7 @@ using Action = System.Action;
 
 namespace FracVisualisationSoftware.ViewModel
 {
-    public class ViewportViewModel : ViewModelBase
+    public class ExcelEditorViewModel : ViewModelBase
     {
         #region fields
 
@@ -33,8 +33,6 @@ namespace FracVisualisationSoftware.ViewModel
         private Workbook _excelWorkbook;
         private Worksheet _excelWorksheet;
         private Range _excelUsedRange;
-
-        private Point3DCollection _tubePath;
 
         private string _excelFileName;
 
@@ -50,18 +48,9 @@ namespace FracVisualisationSoftware.ViewModel
         private string _zColumnHeading; //Northing
         private bool? _zColumnFound;
 
-        private double _tubeLength;
-        private double _tubeDiameter;
-
         #endregion fields
 
         #region properties
-
-        public Point3DCollection TubePath
-        {
-            get { return _tubePath; }
-            set { _tubePath = value; RaisePropertyChanged(() => TubePath); }
-        }
 
         public string ExcelFileName
         {
@@ -147,18 +136,6 @@ namespace FracVisualisationSoftware.ViewModel
             set { _zColumnFound = value; RaisePropertyChanged(() => ZColumnFound); }
         }
 
-        public double TubeLength
-        {
-            get => _tubeLength;
-            set { _tubeLength = value; RaisePropertyChanged(); }
-        }
-
-        public double TubeDiameter
-        {
-            get => _tubeDiameter;
-            set { _tubeDiameter = value; RaisePropertyChanged(); }
-        }
-
         public ObservableCollection<Visual3D> ViewportObjects { get; set; }
 
         #endregion properties
@@ -168,17 +145,14 @@ namespace FracVisualisationSoftware.ViewModel
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-        public ViewportViewModel(IDialogCoordinator dialogCoordinator)
+        public ExcelEditorViewModel(IDialogCoordinator dialogCoordinator)
         {
             _dialogCoordinator = dialogCoordinator;
 
             SelectExcelFileCommand = new RelayCommand(SelectExcelFileAction);
             ReadExcelFileCommand = new RelayCommand(ReadExcelFileAction, CanReadExcelFileAction);
-            GenerateModelsCommand = new RelayCommand(GenerateModelsAction, CanGenerateModelsAction);
 
             ExcelWorksheetNames = new ObservableCollection<string>();
-            ViewportObjects = new ObservableCollection<Visual3D>();
-            _tubePath = new Point3DCollection();
         }
 
         #endregion constructor
@@ -187,7 +161,6 @@ namespace FracVisualisationSoftware.ViewModel
 
         public ICommand SelectExcelFileCommand { get; }
         public ICommand ReadExcelFileCommand { get; }
-        public ICommand GenerateModelsCommand { get; }
 
         #endregion commands 
 
@@ -312,7 +285,7 @@ namespace FracVisualisationSoftware.ViewModel
 
                 while (!allValuesParsed)
                 {
-                    if (IsNumeric(_excelUsedRange.Cells[currentRow, xColumn.Column].Value2))
+                    if (_excelUsedRange.Cells[currentRow, xColumn.Column].Value2.IsNumeric)
                     {
                         if (!initalValuesSet)
                         {
@@ -358,40 +331,7 @@ namespace FracVisualisationSoftware.ViewModel
             await progressDialogController.CloseAsync();
         }
 
-        private bool CanGenerateModelsAction()
-        {
-            return TubePath.Any();
-        }
-
-        private void GenerateModelsAction()
-        {
-            ViewportObjects.Clear();
-
-            ViewportObjects.Add(new SunLight());
-
-            ViewportObjects.Add(new TubeVisual3D { AddCaps = true, Path = TubePath, Diameter = TubeDiameter });
-        }
-
         #endregion command methods
-
-        #region generic Methods
-
-        private bool IsNumeric(object value)
-        {
-            return value is sbyte
-                   || value is byte
-                   || value is short
-                   || value is ushort
-                   || value is int
-                   || value is uint
-                   || value is long
-                   || value is ulong
-                   || value is float
-                   || value is double
-                   || value is decimal;
-        }
-
-        #endregion generic Methods
 
         #endregion methods
 

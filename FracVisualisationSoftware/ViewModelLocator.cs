@@ -1,9 +1,11 @@
+using System.Windows.Threading;
 using CommonServiceLocator;
+using FracVisualisationSoftware.ViewModel;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using MahApps.Metro.Controls.Dialogs;
 
-namespace FracVisualisationSoftware.ViewModel
+namespace FracVisualisationSoftware
 {
     /// <summary>
     /// This class contains static references to all the view models in the
@@ -22,24 +24,18 @@ namespace FracVisualisationSoftware.ViewModel
             SimpleIoc.Default.Register<IDialogCoordinator, DialogCoordinator>();
 
             //ViewModels
-            SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<ViewportViewModel>();
-        }
-
-        public MainViewModel Main
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<MainViewModel>();
-            }
+            SimpleIoc.Default.Register<ExcelEditorViewModel>();
         }
 
         public ViewportViewModel Viewport
         {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<ViewportViewModel>();
-            }
+            get { return ServiceLocator.Current.GetInstance<ViewportViewModel>(); }
+        }
+
+        public ExcelEditorViewModel ExcelEditor
+        {
+            get { return ServiceLocator.Current.GetInstance<ExcelEditorViewModel>(); }
         }
     }
 }

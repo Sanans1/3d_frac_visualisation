@@ -6,7 +6,6 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
-using FracVisualisationSoftware.Annotations;
 using SharpDX;
 
 namespace FracVisualisationSoftware.Models
@@ -18,11 +17,6 @@ namespace FracVisualisationSoftware.Models
         private double _highestValueOfAllStages;
 
         private Point3DCollection _columnPath;
-
-        public ColumnModel()
-        {
-            ColumnPath = new Point3DCollection();
-        }
 
         public override Point3D Position { get; set; }
 
@@ -71,7 +65,6 @@ namespace FracVisualisationSoftware.Models
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
