@@ -53,8 +53,8 @@
             </ComboBox>
 
             <TextBlock Grid.Column="0" Grid.Row="2" Text="X Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
-            <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding XColumnHeading, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"  Margin="{StaticResource TypicalMargin}">
-                <TextBox.Style>
+            <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding XColumnHeading, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"  Margin="{StaticResource TypicalMargin}" ToolTip="Example: Easting">
+            <TextBox.Style>
                     <Style TargetType="TextBox" BasedOn="{StaticResource HeadingTextBoxStyle}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding XColumnFound}" Value="True">
@@ -72,7 +72,7 @@
             </TextBox>
 
             <TextBlock Grid.Column="0" Grid.Row="3" Text="Y Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
-            <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding YColumnHeading, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}">
+            <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding YColumnHeading, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}" ToolTip="Example: TVD">
                 <TextBox.Style>
                     <Style TargetType="TextBox" BasedOn="{StaticResource HeadingTextBoxStyle}">
                         <Style.Triggers>
@@ -91,7 +91,7 @@
             </TextBox>
 
             <TextBlock Grid.Column="0" Grid.Row="4" Text="Z Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
-            <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding ZColumnHeading, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}">
+            <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding ZColumnHeading, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}" ToolTip="Example: Northing">
                 <TextBox.Style>
                     <Style TargetType="TextBox" BasedOn="{StaticResource HeadingTextBoxStyle}">
                         <Style.Triggers>

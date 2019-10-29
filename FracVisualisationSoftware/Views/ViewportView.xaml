@@ -15,11 +15,11 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <h:HelixViewport3D ShowViewCube="False" ItemsSource="{Binding ViewportObjects}">
-            <i:Interaction.Triggers>
+            <!--<i:Interaction.Triggers>
                 <i:EventTrigger EventName="Loaded">
-                    <i:InvokeCommandAction Command="{Binding HelixViewport3DLoadedCommand}"/>
+                    <i:InvokeCommandAction Command="{Binding HelixViewport3DLoadedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type h:HelixViewport3D}}}"/>
                 </i:EventTrigger>
-            </i:Interaction.Triggers>
+            </i:Interaction.Triggers>-->
         </h:HelixViewport3D>
         <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="30, 20">
             <ToggleButton x:Name="TimerButton" Style="{DynamicResource MaterialDesignFlatPrimaryToggleButton}" Width="55" Height="55">

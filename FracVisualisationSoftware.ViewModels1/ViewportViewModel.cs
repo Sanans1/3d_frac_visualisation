@@ -18,6 +18,7 @@ using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Office.Interop.Excel;
 using Microsoft.Win32;
 using Action = System.Action;
+using Camera = HelixToolkit.Wpf.SharpDX.Camera;
 
 namespace FracVisualisationSoftware.ViewModel
 {
@@ -60,6 +61,8 @@ namespace FracVisualisationSoftware.ViewModel
 
         public ObservableCollection<Visual3D> ViewportObjects { get; set; }
 
+        public Camera ViewPortCamera { get; set; }
+
         #endregion properties
 
         #region constructor
@@ -74,8 +77,10 @@ namespace FracVisualisationSoftware.ViewModel
             ViewportObjects = new ObservableCollection<Visual3D>();
             TubePath = new Point3DCollection();
 
+            TubeDiameter = 5;
+
+            HelixViewport3DLoadedCommand = new RelayCommand<HelixViewport3D>(HelixViewport3DLoadedAction); //TODO Get reference to the ViewPort so we can manipulate the camera
             GenerateModelsCommand = new RelayCommand(GenerateModelsAction, CanGenerateModelsAction);
-            //HelixViewport3DLoaded = new R(); //TODO Get reference to the ViewPort so we can manipulate the camera
 
             MessengerInstance.Register<GenericMessage<List<Point3D>>>(this, TubePathMessageCallback);
         }
@@ -85,13 +90,18 @@ namespace FracVisualisationSoftware.ViewModel
         #region commands
 
         public ICommand GenerateModelsCommand { get; }
-        public ICommand HelixViewport3DLoaded { get; }
+        public ICommand HelixViewport3DLoadedCommand { get; }
 
         #endregion commands 
 
         #region methods
 
         #region command methods
+
+        private void HelixViewport3DLoadedAction(HelixViewport3D viewPort)
+        {
+            ViewPortCamera.Position = new Point3D(0,0,0);
+        }
 
         private bool CanGenerateModelsAction()
         {

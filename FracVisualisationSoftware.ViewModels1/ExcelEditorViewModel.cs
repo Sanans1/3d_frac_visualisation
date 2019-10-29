@@ -200,7 +200,7 @@ namespace FracVisualisationSoftware.ViewModel
                     progressDialogController.SetMessage("Starting Excel process...");
 
                     string excelFilePath = openFileDialog.FileName;
-                    ExcelFileName = excelFilePath.Split('\\').Last();
+                    ExcelFileName = excelFilePath.Substring(excelFilePath.LastIndexOf('\\') + 1);
 
                     _excelApplication = new Application();
 
