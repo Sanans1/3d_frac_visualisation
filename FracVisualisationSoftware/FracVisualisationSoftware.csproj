@@ -193,7 +193,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FracVisualisationSoftware.ViewModels1\FracVisualisationSoftware.ViewModels.csproj">
+    <ProjectReference Include="..\FracVisualisationSoftware.ViewModels\FracVisualisationSoftware.ViewModels.csproj">
       <Project>{d19e7187-429b-448d-a243-3dc2641c2726}</Project>
       <Name>FracVisualisationSoftware.ViewModels</Name>
     </ProjectReference>

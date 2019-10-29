@@ -7,8 +7,8 @@
     <ProjectGuid>{D19E7187-429B-448D-A243-3DC2641C2726}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FracVisualisationSoftware.ViewModels1</RootNamespace>
-    <AssemblyName>FracVisualisationSoftware.ViewModels1</AssemblyName>
+    <RootNamespace>FracVisualisationSoftware.ViewModels</RootNamespace>
+    <AssemblyName>FracVisualisationSoftware.ViewModels</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -95,11 +95,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FracVisualisationSoftware.Misc1\FracVisualisationSoftware.Misc.csproj">
+    <ProjectReference Include="..\FracVisualisationSoftware.Misc\FracVisualisationSoftware.Misc.csproj">
       <Project>{9f917799-2300-4b56-9ce9-f1fbf1aa2f15}</Project>
       <Name>FracVisualisationSoftware.Misc</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FracVisualisationSoftware.Models1\FracVisualisationSoftware.Models.csproj">
+    <ProjectReference Include="..\FracVisualisationSoftware.Models\FracVisualisationSoftware.Models.csproj">
       <Project>{770b2572-e31f-4016-bec2-a206803429e7}</Project>
       <Name>FracVisualisationSoftware.Models</Name>
     </ProjectReference>

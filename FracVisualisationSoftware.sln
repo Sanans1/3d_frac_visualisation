@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.28917.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FracVisualisationSoftware", "FracVisualisationSoftware\FracVisualisationSoftware.csproj", "{F320AFB6-86D9-4E6D-830D-97EE9791CDCC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FracVisualisationSoftware.Misc", "FracVisualisationSoftware.Misc1\FracVisualisationSoftware.Misc.csproj", "{9F917799-2300-4B56-9CE9-F1FBF1AA2F15}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FracVisualisationSoftware.Misc", "FracVisualisationSoftware.Misc\FracVisualisationSoftware.Misc.csproj", "{9F917799-2300-4B56-9CE9-F1FBF1AA2F15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FracVisualisationSoftware.Models", "FracVisualisationSoftware.Models1\FracVisualisationSoftware.Models.csproj", "{770B2572-E31F-4016-BEC2-A206803429E7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FracVisualisationSoftware.Models", "FracVisualisationSoftware.Models\FracVisualisationSoftware.Models.csproj", "{770B2572-E31F-4016-BEC2-A206803429E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FracVisualisationSoftware.ViewModels", "FracVisualisationSoftware.ViewModels1\FracVisualisationSoftware.ViewModels.csproj", "{D19E7187-429B-448D-A243-3DC2641C2726}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FracVisualisationSoftware.ViewModels", "FracVisualisationSoftware.ViewModels\FracVisualisationSoftware.ViewModels.csproj", "{D19E7187-429B-448D-A243-3DC2641C2726}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
