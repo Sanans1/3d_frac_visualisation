@@ -16,8 +16,8 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using HelixToolkit.Wpf;
 using MahApps.Metro.Controls.Dialogs;
-using Microsoft.Office.Interop.Excel;
 using Microsoft.Win32;
+using OfficeOpenXml;
 using Action = System.Action;
 
 namespace FracVisualisationSoftware.ViewModel
@@ -32,10 +32,10 @@ namespace FracVisualisationSoftware.ViewModel
 
         #endregion injected fields
         
-        private Application _excelApplication;
-        private Workbook _excelWorkbook;
-        private Worksheet _excelWorksheet;
-        private Range _excelUsedRange;
+        private ExcelPackage _excelApplication;
+        private ExcelWorkbook _excelWorkbook;
+        private ExcelWorksheet _excelWorksheet;
+        private ExcelRange _excelUsedRange;
 
         private string _excelFileName;
 
@@ -74,8 +74,8 @@ namespace FracVisualisationSoftware.ViewModel
             {
                 _selectedExcelWorksheetIndex = value + 1;
 
-                _excelWorksheet = _excelWorkbook.Sheets[_selectedExcelWorksheetIndex];
-                _excelUsedRange = _excelWorksheet.UsedRange;
+                _excelWorksheet = _excelWorkbook.Worksheets[_selectedExcelWorksheetIndex];
+                _excelUsedRange = _excelWorksheet.Cells;
 
                 RaisePropertyChanged(() => SelectedExcelWorksheetIndex);
             }
@@ -162,19 +162,19 @@ namespace FracVisualisationSoftware.ViewModel
 
         private bool? HeadingValidation(string columnHeading)
         {
-            Range columnRange = _excelUsedRange.Find(columnHeading, LookAt: XlLookAt.xlWhole);
+            IEnumerable<ExcelRangeBase> foundCell = from cell in _excelUsedRange where cell.Value?.ToString() == columnHeading select cell;
+
             if (string.IsNullOrWhiteSpace(columnHeading))
             {
                 return null;
             }
-            else if (columnRange == null || string.IsNullOrWhiteSpace(columnRange.Value2 as string))
+
+            if (!foundCell.Any())
             {
                 return false;
             }
-            else
-            {
-                return true;
-            }
+
+            return true;
         }
 
         #region command methods
@@ -202,19 +202,19 @@ namespace FracVisualisationSoftware.ViewModel
                     string excelFilePath = openFileDialog.FileName;
                     ExcelFileName = excelFilePath.Substring(excelFilePath.LastIndexOf('\\') + 1);
 
-                    _excelApplication = new Application();
+                    _excelApplication = new ExcelPackage(new FileInfo(excelFilePath));
 
                     progressDialogController.SetProgress(50);
                     progressDialogController.SetMessage("Opening Excel Workbook...");
 
-                    _excelWorkbook = _excelApplication.Workbooks.Open(excelFilePath);
+                    _excelWorkbook = _excelApplication.Workbook;
 
                     progressDialogController.SetProgress(75);
                     progressDialogController.SetMessage("Reading Worksheet names...");
                 }
             });
 
-            foreach (Worksheet excelWorksheet in _excelWorkbook.Worksheets)
+            foreach (ExcelWorksheet excelWorksheet in _excelWorkbook.Worksheets)
             {
                 ExcelWorksheetNames.Add(excelWorksheet.Name);
             }
@@ -242,15 +242,15 @@ namespace FracVisualisationSoftware.ViewModel
 
             await Task.Run(() =>
             {
-                Range xColumn = _excelUsedRange.Find(_xColumnHeading);
+                IEnumerable<ExcelRangeBase> xColumn = from cell in _excelUsedRange where cell.Value?.ToString() == _xColumnHeading select cell;
 
                 progressDialogController.SetProgress(33);
 
-                Range yColumn = _excelUsedRange.Find(_yColumnHeading);
+                IEnumerable<ExcelRangeBase> yColumn = from cell in _excelUsedRange where cell.Value?.ToString() == _yColumnHeading select cell;
 
                 progressDialogController.SetProgress(66);
 
-                Range zColumn = _excelUsedRange.Find(_zColumnHeading);
+                IEnumerable<ExcelRangeBase> zColumn = from cell in _excelUsedRange where cell.Value?.ToString() == _zColumnHeading select cell;
 
                 progressDialogController.SetMessage("Headings found...");
                 progressDialogController.SetProgress(100);
@@ -263,9 +263,9 @@ namespace FracVisualisationSoftware.ViewModel
 
                 bool initalValuesSet = false;
 
-                int currentRow = xColumn.Row;
+                int currentRow = xColumn.First().Start.Row;
 
-                int numberOfRows = _excelUsedRange.Rows.Count;
+                int numberOfRows = _excelWorksheet.Dimension.Rows;
 
                 bool allValuesParsed = false;
 
@@ -275,21 +275,21 @@ namespace FracVisualisationSoftware.ViewModel
 
                 while (!allValuesParsed)
                 {
-                    object cellValue = _excelUsedRange.Cells[currentRow, xColumn.Column].Value2;
+                    object cellValue = _excelWorksheet.Cells[currentRow, xColumn.First().Start.Column].Value;
                     if (cellValue.IsNumeric())
                     {
                         if (!initalValuesSet)
                         {
-                            initialX = (_excelUsedRange.Cells[currentRow, xColumn.Column].Value2) * -1;
-                            initialY = (_excelUsedRange.Cells[currentRow, yColumn.Column].Value2) * -1;
-                            initialZ = (_excelUsedRange.Cells[currentRow, zColumn.Column].Value2) * -1;
+                            initialX = (double)_excelWorksheet.Cells[currentRow, xColumn.First().Start.Column].Value * -1;
+                            initialY = (double)_excelWorksheet.Cells[currentRow, yColumn.First().Start.Column].Value * -1;
+                            initialZ = (double)_excelWorksheet.Cells[currentRow, zColumn.First().Start.Column].Value * -1;
 
                             initalValuesSet = true;
                         }
                         
-                        double x = (_excelUsedRange.Cells[currentRow, xColumn.Column].Value2) * -1;
-                        double y = (_excelUsedRange.Cells[currentRow, yColumn.Column].Value2) * -1;
-                        double z = (_excelUsedRange.Cells[currentRow, zColumn.Column].Value2) * -1;
+                        double x = (double)_excelWorksheet.Cells[currentRow, xColumn.First().Start.Column].Value * -1;
+                        double y = (double)_excelWorksheet.Cells[currentRow, yColumn.First().Start.Column].Value * -1;
+                        double z = (double)_excelWorksheet.Cells[currentRow, zColumn.First().Start.Column].Value * -1;
                         
                         x -= initialX;
                         y -= initialY;

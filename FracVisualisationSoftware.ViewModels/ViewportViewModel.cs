@@ -15,7 +15,6 @@ using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Threading;
 using HelixToolkit.Wpf;
 using MahApps.Metro.Controls.Dialogs;
-using Microsoft.Office.Interop.Excel;
 using Microsoft.Win32;
 using Action = System.Action;
 using Camera = HelixToolkit.Wpf.SharpDX.Camera;
