@@ -10,7 +10,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         GlowBrush="{DynamicResource AccentColorBrush}"
-        Title="Frac 400D Visualisation" Height="450" Width="800">
+        Title="Reservoir Visualisation Project" Height="450" Width="800">
     <mah:MetroWindow.Resources>
         <Style TargetType="mah:Flyout">
             <Setter Property="Theme" Value="Adapt"/>
