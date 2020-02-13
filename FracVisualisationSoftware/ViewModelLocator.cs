@@ -1,6 +1,6 @@
 using System.Windows.Threading;
 using CommonServiceLocator;
-using FracVisualisationSoftware.ViewModel;
+using FracVisualisationSoftware.ViewModels;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using MahApps.Metro.Controls.Dialogs;
