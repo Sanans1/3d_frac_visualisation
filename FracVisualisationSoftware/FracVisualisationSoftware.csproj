@@ -128,14 +128,20 @@
     </ApplicationDefinition>
     <Compile Include="Enums\VisualModeEnum.cs" />
     <Compile Include="Extensions\MathExtensionMethods.cs" />
-    <Compile Include="Models\ColumnModel.cs" />
-    <Compile Include="Models\StageModelBase.cs" />
+    <Compile Include="Models\BoreholeModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Services\Implementations\Parsing\ExcelParsingService.cs" />
+    <Compile Include="Services\Implementations\Parsing\LASParsingService.cs" />
+    <Compile Include="Services\Implementations\Parsing\OtherParsingService.cs" />
     <Compile Include="ViewModelLocator.cs" />
+    <Compile Include="ViewModels\BoreholeManagementViewModel.cs" />
     <Compile Include="ViewModels\ExcelEditorViewModel.cs" />
     <Compile Include="ViewModels\ViewportViewModel.cs" />
     <Compile Include="Views\ExcelEditorView.xaml.cs">
       <DependentUpon>ExcelEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BoreholeManagementView.xaml.cs">
+      <DependentUpon>BoreholeManagementView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ViewportView.xaml.cs">
       <DependentUpon>ViewportView.xaml</DependentUpon>
@@ -153,6 +159,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\ExcelEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BoreholeManagementView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -189,6 +199,8 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Services\Interfaces\Parsing\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

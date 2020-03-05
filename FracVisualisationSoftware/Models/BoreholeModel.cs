@@ -4,14 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
-using HelixToolkit.Wpf.SharpDX;
 
 namespace FracVisualisationSoftware.Models
 {
-    public abstract class StageModelBase
+    public class BoreholeModel
     {
-        public abstract Point3D Position { get; set; }
-
-        public abstract double Value { get; set; }
+        public string Name { get; set; }
+        public Point3DCollection TubePath { get; set; }
     }
 }

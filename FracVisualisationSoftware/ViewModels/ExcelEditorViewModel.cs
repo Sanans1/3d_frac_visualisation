@@ -138,8 +138,10 @@ namespace FracVisualisationSoftware.ViewModels
 
             ExcelWorksheetNames = new ObservableCollection<string>();
 
-            SelectExcelFileCommand = new RelayCommand(SelectExcelFileAction);
+            //SelectExcelFileCommand = new RelayCommand(SelectExcelFileAction);
             ReadExcelFileCommand = new RelayCommand(ReadExcelFileAction, CanReadExcelFileAction);
+
+            MessengerInstance.Register<string>(this, "Excel File Selected", SelectExcelFileAction);
         }
 
         #endregion constructor
@@ -176,35 +178,28 @@ namespace FracVisualisationSoftware.ViewModels
         /// Opens a OpenFileDialog to allow the user to select an Excel file.
         /// This also populates the Worksheet dropdown with names of Worksheets.
         /// </summary>
-        private async void SelectExcelFileAction()
+        private async void SelectExcelFileAction(string filePath)
         {
             ProgressDialogController progressDialogController = await _dialogCoordinator.ShowProgressAsync(this, "Please wait...", "Awaiting user to select file...");
             progressDialogController.Maximum = 100;
 
             await Task.Run(() => 
             {
-                OpenFileDialog openFileDialog = new OpenFileDialog();
-                openFileDialog.Filter = "Excel Files|*.xls;*.xlsx;*.xlsm";
-                openFileDialog.Title = "Select an Excel file with Frac Lateral Data.";
+                progressDialogController.SetProgress(25);
+                progressDialogController.SetMessage("Starting Excel process...");
 
-                if (openFileDialog.ShowDialog() == true)
-                {
-                    progressDialogController.SetProgress(25);
-                    progressDialogController.SetMessage("Starting Excel process...");
+                string excelFilePath = filePath;
+                ExcelFileName = excelFilePath.Substring(excelFilePath.LastIndexOf('\\') + 1);
 
-                    string excelFilePath = openFileDialog.FileName;
-                    ExcelFileName = excelFilePath.Substring(excelFilePath.LastIndexOf('\\') + 1);
+                _excelApplication = new ExcelPackage(new FileInfo(excelFilePath));
 
-                    _excelApplication = new ExcelPackage(new FileInfo(excelFilePath));
+                progressDialogController.SetProgress(50);
+                progressDialogController.SetMessage("Opening Excel Workbook...");
 
-                    progressDialogController.SetProgress(50);
-                    progressDialogController.SetMessage("Opening Excel Workbook...");
+                _excelWorkbook = _excelApplication.Workbook;
 
-                    _excelWorkbook = _excelApplication.Workbook;
-
-                    progressDialogController.SetProgress(75);
-                    progressDialogController.SetMessage("Reading Worksheet names...");
-                }
+                progressDialogController.SetProgress(75);
+                progressDialogController.SetMessage("Reading Worksheet names...");
             });
 
             foreach (ExcelWorksheet excelWorksheet in _excelWorkbook.Worksheets)

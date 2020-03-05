@@ -26,6 +26,7 @@ namespace FracVisualisationSoftware
             //ViewModels
             SimpleIoc.Default.Register<ViewportViewModel>();
             SimpleIoc.Default.Register<ExcelEditorViewModel>();
+            SimpleIoc.Default.Register<BoreholeManagementViewModel>();
         }
 
         public ViewportViewModel Viewport
@@ -36,6 +37,11 @@ namespace FracVisualisationSoftware
         public ExcelEditorViewModel ExcelEditor
         {
             get { return ServiceLocator.Current.GetInstance<ExcelEditorViewModel>(); }
+        }
+
+        public BoreholeManagementViewModel BoreholeManagement
+        {
+            get { return ServiceLocator.Current.GetInstance<BoreholeManagementViewModel>(); }
         }
     }
 }

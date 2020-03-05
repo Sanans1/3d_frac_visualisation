@@ -21,35 +21,5 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>-->
         </h:HelixViewport3D>
-        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="30, 20">
-            <ToggleButton x:Name="TimerButton" Style="{DynamicResource MaterialDesignFlatPrimaryToggleButton}" Width="55" Height="55">
-                <materialDesign:PackIcon Kind="Timer" Width="40" Height="40"/>
-            </ToggleButton>
-            <ToggleButton x:Name="EditorButton" Style="{DynamicResource MaterialDesignFlatPrimaryToggleButton}" IsChecked="True" Margin="10,0,0,0" Width="55" Height="55">
-                <materialDesign:PackIcon Kind="Edit" Width="40" Height="40"/>
-            </ToggleButton>
-        </StackPanel>
-        <mah:FlyoutsControl>
-            <mah:Flyout Header="Editor" Position="Right" IsOpen="{Binding IsChecked, ElementName=EditorButton, Mode=TwoWay}" Width="400">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-
-                        <local:ExcelEditorView Grid.Row="0"/>
-
-                        <Separator Grid.Row="1" BorderBrush="{StaticResource AccentColorBrush}" BorderThickness="{StaticResource GroupBorder}"/>
-                        <Button Grid.Row="2" Command="{Binding GenerateModelsCommand}" Content="Generate" Margin="{StaticResource TypicalMargin}"/>
-                    </Grid>
-                </ScrollViewer>
-            </mah:Flyout>
-            <mah:Flyout Position="Bottom" TitleVisibility="Collapsed" IsOpen="{Binding IsChecked, ElementName=TimerButton, Mode=TwoWay}" Height="150">
-            
-            </mah:Flyout>
-        </mah:FlyoutsControl>
     </Grid>
 </UserControl>
