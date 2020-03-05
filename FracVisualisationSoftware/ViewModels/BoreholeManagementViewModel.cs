@@ -96,6 +96,8 @@ namespace FracVisualisationSoftware.ViewModels
                     }
                 }
             });
+
+            await progressDialogController.CloseAsync();
         }
 
         #endregion

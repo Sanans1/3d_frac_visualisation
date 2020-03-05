@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
 using FracVisualisationSoftware.Extensions;
@@ -32,6 +33,7 @@ namespace FracVisualisationSoftware.ViewModels
 
         private string _excelFileName;
 
+        private readonly object _excelCollectionLock;
         private ObservableCollection<string> _excelWorksheetNames;
         private int _selectedExcelWorksheetIndex;
 
@@ -57,7 +59,12 @@ namespace FracVisualisationSoftware.ViewModels
         public ObservableCollection<string> ExcelWorksheetNames
         {
             get { return _excelWorksheetNames; }
-            set { _excelWorksheetNames = value; RaisePropertyChanged(() => ExcelWorksheetNames); }
+            set
+            {
+                _excelWorksheetNames = value;
+                BindingOperations.EnableCollectionSynchronization(_excelWorksheetNames, _excelCollectionLock);
+                RaisePropertyChanged(() => ExcelWorksheetNames);
+            }
         }
 
         public int SelectedExcelWorksheetIndex
@@ -136,6 +143,7 @@ namespace FracVisualisationSoftware.ViewModels
         {
             _dialogCoordinator = dialogCoordinator;
 
+            _excelCollectionLock = new object();
             ExcelWorksheetNames = new ObservableCollection<string>();
 
             //SelectExcelFileCommand = new RelayCommand(SelectExcelFileAction);

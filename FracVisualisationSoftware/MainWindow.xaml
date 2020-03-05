@@ -43,8 +43,8 @@
 
                         <!--<local:ExcelEditorView Grid.Row="0"/>-->
 
-                        <!--<Separator Grid.Row="1" BorderBrush="{StaticResource AccentColorBrush}" BorderThickness="{StaticResource GroupBorder}"/>
-                        <Button Grid.Row="2" Command="{Binding GenerateModelsCommand}" Content="Generate" Margin="{StaticResource TypicalMargin}"/>-->
+                        <Separator Grid.Row="1" BorderBrush="{StaticResource AccentColorBrush}" BorderThickness="{StaticResource GroupBorder}"/>
+                        <Button Grid.Row="2" Command="{Binding GenerateModelsCommand}" Content="Generate" Margin="{StaticResource TypicalMargin}"/>
                     </Grid>
                 </ScrollViewer>
             </mah:Flyout>
