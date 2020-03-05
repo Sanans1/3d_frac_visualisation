@@ -126,6 +126,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\MathConverter.cs" />
     <Compile Include="Enums\VisualModeEnum.cs" />
     <Compile Include="Extensions\MathExtensionMethods.cs" />
     <Compile Include="Models\BoreholeModel.cs" />

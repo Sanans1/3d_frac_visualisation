@@ -8,6 +8,8 @@
         xmlns:views="clr-namespace:FracVisualisationSoftware.Views"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:converters="http://metro.mahapps.com/winfx/xaml/shared"
+        xmlns:converters1="clr-namespace:FracVisualisationSoftware.Converters"
         mc:Ignorable="d"
         GlowBrush="{DynamicResource AccentColorBrush}"
         Title="Reservoir Visualisation Project" Height="450" Width="800">
@@ -27,7 +29,7 @@
             </ToggleButton>
         </StackPanel>
         <mah:FlyoutsControl>
-            <mah:Flyout Header="Editor" Position="Right" IsOpen="{Binding IsChecked, ElementName=EditorButton, Mode=TwoWay}" Width="400">
+            <mah:Flyout Header="Editor" Position="Right" IsOpen="{Binding IsChecked, ElementName=EditorButton, Mode=TwoWay}" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:MetroWindow}, Path=ActualWidth, Converter={converters1:MathConverter}, ConverterParameter=x/2}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -46,8 +48,8 @@
                     </Grid>
                 </ScrollViewer>
             </mah:Flyout>
-            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsChecked, ElementName=EditorButton, Mode=TwoWay}" Width="400">
-
+            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsChecked, ElementName=EditorButton, Mode=TwoWay}" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:MetroWindow}, Path=ActualWidth, Converter={converters1:MathConverter}, ConverterParameter=x/2}">
+                <views:ExcelEditorView/>
             </mah:Flyout>
             <mah:Flyout Position="Bottom" TitleVisibility="Collapsed" IsOpen="{Binding IsChecked, ElementName=TimerButton, Mode=TwoWay}" Height="150">
 
