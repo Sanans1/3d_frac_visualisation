@@ -11,6 +11,6 @@ namespace FracVisualisationSoftware.Models
     {
         public int ID { get; set; }
         public string Name { get; set; }
-        public Point3DCollection TubePath { get; set; }
+        public List<Point3D> TubePath { get; set; }
     }
 }

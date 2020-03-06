@@ -7,6 +7,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
 using FracVisualisationSoftware.Extensions;
+using FracVisualisationSoftware.Models;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
@@ -311,7 +312,14 @@ namespace FracVisualisationSoftware.ViewModels
                     progressDialogController.SetProgress(currentRow - 1);
                 }
 
-                MessengerInstance.Send(new GenericMessage<List<Point3D>>(tubePath));
+                BoreholeModel boreholeModel = new BoreholeModel
+                {
+                    ID = 0,
+                    Name = "Blah",
+                    TubePath = tubePath
+                };
+
+                MessengerInstance.Send(boreholeModel, "Borehole Data Added");
             });
 
             await progressDialogController.CloseAsync();

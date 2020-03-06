@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
+using FracVisualisationSoftware.Models;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
@@ -60,11 +61,13 @@ namespace FracVisualisationSoftware.ViewModels
 
             ViewportObjects = new ObservableCollection<Visual3D>();
 
+            _tubePath = new Point3DCollection();
+
             TubeDiameter = 5;
 
             HelixViewport3DLoadedCommand = new RelayCommand<HelixViewport3D>(HelixViewport3DLoadedAction); //TODO Get reference to the ViewPort so we can manipulate the camera
 
-            MessengerInstance.Register<GenericMessage<List<Point3D>>>(this, AddBoreholeMessageCallback);
+            MessengerInstance.Register<BoreholeModel>(this, "Borehole Data Added",AddBoreholeMessageCallback);
         }
 
         #endregion constructor
@@ -88,15 +91,15 @@ namespace FracVisualisationSoftware.ViewModels
 
         #region event methods
 
-        private void AddBoreholeMessageCallback(GenericMessage<List<Point3D>> message)
+        private void AddBoreholeMessageCallback(BoreholeModel boreholeModel)
         {
-            if (message.Content == null || !_tubePath.Any())
+            if (boreholeModel == null || !boreholeModel.TubePath.Any())
                 return;
 
-            _tubePath.Dispatcher.Invoke(() => 
-            { 
-                _tubePath = new Point3DCollection(message.Content);
+            _tubePath.Dispatcher?.Invoke(() =>
+            {
 
+                _tubePath = new Point3DCollection(boreholeModel.TubePath);
                 //ViewportObjects.Clear();
 
                 ViewportObjects.Add(new SunLight());
