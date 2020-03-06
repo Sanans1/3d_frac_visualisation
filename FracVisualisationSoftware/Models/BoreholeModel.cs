@@ -9,6 +9,7 @@ namespace FracVisualisationSoftware.Models
 {
     public class BoreholeModel
     {
+        public int ID { get; set; }
         public string Name { get; set; }
         public Point3DCollection TubePath { get; set; }
     }

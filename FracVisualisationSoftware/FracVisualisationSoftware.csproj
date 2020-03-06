@@ -137,6 +137,7 @@
     <Compile Include="ViewModelLocator.cs" />
     <Compile Include="ViewModels\BoreholeManagementViewModel.cs" />
     <Compile Include="ViewModels\ExcelEditorViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ViewportViewModel.cs" />
     <Compile Include="Views\ExcelEditorView.xaml.cs">
       <DependentUpon>ExcelEditorView.xaml</DependentUpon>

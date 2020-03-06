@@ -12,7 +12,9 @@
         xmlns:converters1="clr-namespace:FracVisualisationSoftware.Converters"
         mc:Ignorable="d"
         GlowBrush="{DynamicResource AccentColorBrush}"
-        Title="Reservoir Visualisation Project" Height="450" Width="800">
+        Title="Reservoir Visualisation Project" 
+        DataContext="{Binding Main, Source={StaticResource Locator}}"
+        Height="450" Width="800">
     <mah:MetroWindow.Resources>
         <Style TargetType="mah:Flyout">
             <Setter Property="Theme" Value="Adapt"/>

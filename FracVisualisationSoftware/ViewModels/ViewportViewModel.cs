@@ -31,12 +31,6 @@ namespace FracVisualisationSoftware.ViewModels
 
         #region properties
 
-        public Point3DCollection TubePath
-        {
-            get { return _tubePath; }
-            set { _tubePath = value; RaisePropertyChanged(() => TubePath); }
-        }
-
         public double TubeLength
         {
             get => _tubeLength;
@@ -65,21 +59,18 @@ namespace FracVisualisationSoftware.ViewModels
             _dialogCoordinator = dialogCoordinator;
 
             ViewportObjects = new ObservableCollection<Visual3D>();
-            TubePath = new Point3DCollection();
 
             TubeDiameter = 5;
 
             HelixViewport3DLoadedCommand = new RelayCommand<HelixViewport3D>(HelixViewport3DLoadedAction); //TODO Get reference to the ViewPort so we can manipulate the camera
-            GenerateModelsCommand = new RelayCommand(GenerateModelsAction, CanGenerateModelsAction);
 
-            MessengerInstance.Register<GenericMessage<List<Point3D>>>(this, TubePathMessageCallback);
+            MessengerInstance.Register<GenericMessage<List<Point3D>>>(this, AddBoreholeMessageCallback);
         }
 
         #endregion constructor
 
         #region commands
 
-        public ICommand GenerateModelsCommand { get; }
         public ICommand HelixViewport3DLoadedCommand { get; }
 
         #endregion commands 
@@ -93,32 +84,26 @@ namespace FracVisualisationSoftware.ViewModels
             ViewPortCamera.Position = new Point3D(0,0,0);
         }
 
-        private bool CanGenerateModelsAction()
-        {
-            return TubePath.Any();
-        }
-
-        private void GenerateModelsAction()
-        {
-            ViewportObjects.Clear();
-
-            ViewportObjects.Add(new SunLight());
-
-            ViewportObjects.Add(new TubeVisual3D { AddCaps = true, Path = TubePath, Diameter = TubeDiameter });
-        }
-
         #endregion command methods
 
         #region event methods
 
-        private void TubePathMessageCallback(GenericMessage<List<Point3D>> message)
+        private void AddBoreholeMessageCallback(GenericMessage<List<Point3D>> message)
         {
-            if (message.Content == null)
+            if (message.Content == null || !_tubePath.Any())
                 return;
 
-            TubePath.Dispatcher.Invoke(() => 
+            _tubePath.Dispatcher.Invoke(() => 
             { 
-                TubePath = new Point3DCollection(message.Content);
+                _tubePath = new Point3DCollection(message.Content);
+
+                //ViewportObjects.Clear();
+
+                ViewportObjects.Add(new SunLight());
+
+                ViewportObjects.Add(new TubeVisual3D { AddCaps = true, Path = _tubePath, Diameter = TubeDiameter });
+
+                _tubePath.Clear();
             });
         }
 
