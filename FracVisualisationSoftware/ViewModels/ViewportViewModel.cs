@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
+using System.Windows.Threading;
 using FracVisualisationSoftware.Models;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -27,6 +29,7 @@ namespace FracVisualisationSoftware.ViewModels
 
         private double _tubeLength;
         private double _tubeDiameter;
+        private HelixViewport3D _camera;
 
         #endregion fields
 
@@ -46,7 +49,11 @@ namespace FracVisualisationSoftware.ViewModels
 
         public ObservableCollection<Visual3D> ViewportObjects { get; set; }
 
-        public Camera ViewPortCamera { get; set; }
+        public HelixViewport3D Camera
+        {
+            get => _camera;
+            set { _camera = value; RaisePropertyChanged(); }
+        }
 
         #endregion properties
 
@@ -84,7 +91,7 @@ namespace FracVisualisationSoftware.ViewModels
 
         private void HelixViewport3DLoadedAction(HelixViewport3D viewPort)
         {
-            ViewPortCamera.Position = new Point3D(0,0,0);
+            Camera.
         }
 
         #endregion command methods
@@ -98,15 +105,18 @@ namespace FracVisualisationSoftware.ViewModels
 
             _tubePath.Dispatcher?.Invoke(() =>
             {
-
                 _tubePath = new Point3DCollection(boreholeModel.TubePath);
-                //ViewportObjects.Clear();
+
+                _tubePath.Clear();
+            });
+
+            Application.Current.Dispatcher?.Invoke(() =>
+            {
+                ViewportObjects.Clear();
 
                 ViewportObjects.Add(new SunLight());
 
-                ViewportObjects.Add(new TubeVisual3D { AddCaps = true, Path = _tubePath, Diameter = TubeDiameter });
-
-                _tubePath.Clear();
+                ViewportObjects.Add(new TubeVisual3D {AddCaps = true, Path = _tubePath, Diameter = TubeDiameter});
             });
         }
 
