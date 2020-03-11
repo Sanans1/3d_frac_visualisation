@@ -42,16 +42,17 @@
                         </Grid.RowDefinitions>
 
                         <views:BoreholeManagementView Grid.Row="0"/>
-
-                        <!--<local:ExcelEditorView Grid.Row="0"/>-->
-
-                        <Separator Grid.Row="1" BorderBrush="{StaticResource AccentColorBrush}" BorderThickness="{StaticResource GroupBorder}"/>
-                        <Button Grid.Row="2" Command="{Binding GenerateModelsCommand}" Content="Generate" Margin="{StaticResource TypicalMargin}"/>
                     </Grid>
                 </ScrollViewer>
             </mah:Flyout>
-            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsChecked, ElementName=EditorButton, Mode=TwoWay}" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:MetroWindow}, Path=ActualWidth, Converter={converters1:MathConverter}, ConverterParameter=x/2}">
+            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsExcelFlyoutOpen}" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:MetroWindow}, Path=ActualWidth, Converter={converters1:MathConverter}, ConverterParameter=x/2}">
                 <views:ExcelEditorView/>
+            </mah:Flyout>
+            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsLASFlyoutOpeny}" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:MetroWindow}, Path=ActualWidth, Converter={converters1:MathConverter}, ConverterParameter=x/2}">
+                <views:LASReaderView/>
+            </mah:Flyout>
+            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsEVFlyoutOpen}" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:MetroWindow}, Path=ActualWidth, Converter={converters1:MathConverter}, ConverterParameter=x/2}">
+                <views:EVReaderView/>
             </mah:Flyout>
             <mah:Flyout Position="Bottom" TitleVisibility="Collapsed" IsOpen="{Binding IsChecked, ElementName=TimerButton, Mode=TwoWay}" Height="150">
 

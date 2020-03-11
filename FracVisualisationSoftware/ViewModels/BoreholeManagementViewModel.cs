@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using FracVisualisationSoftware.Enums;
 using FracVisualisationSoftware.Models;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -82,9 +83,11 @@ namespace FracVisualisationSoftware.ViewModels
                         case ".xlsx":
                         case ".xlsm":
                             MessengerInstance.Send(openFileDialog.FileName, "Excel File Selected");
+                            MessengerInstance.Send(FlyoutToggleEnum.ExcelBoreholeParsing);
                             break;
                         case ".las":
                             MessengerInstance.Send(openFileDialog.FileName, "LAS File Selected");
+                            MessengerInstance.Send(FlyoutToggleEnum.LASBoreholeParsing);
                             break;
                         case ".dat":
                         case ".path":
@@ -92,6 +95,7 @@ namespace FracVisualisationSoftware.ViewModels
                         case ".prod":
                         case ".tops":
                             MessengerInstance.Send(openFileDialog.FileName, "EarthVision File Selected");
+                            MessengerInstance.Send(FlyoutToggleEnum.EVBoreholeParsing);
                             break;
                     }
                 }

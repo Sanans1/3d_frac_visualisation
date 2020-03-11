@@ -127,6 +127,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\MathConverter.cs" />
+    <Compile Include="Enums\FlyoutToggleEnum.cs" />
     <Compile Include="Enums\VisualModeEnum.cs" />
     <Compile Include="Extensions\MathExtensionMethods.cs" />
     <Compile Include="Models\BoreholeModel.cs" />
@@ -136,14 +137,20 @@
     <Compile Include="Services\Implementations\Parsing\OtherParsingService.cs" />
     <Compile Include="ViewModelLocator.cs" />
     <Compile Include="ViewModels\BoreholeManagementViewModel.cs" />
-    <Compile Include="ViewModels\ExcelEditorViewModel.cs" />
+    <Compile Include="ViewModels\ExcelReaderViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ViewportViewModel.cs" />
-    <Compile Include="Views\ExcelEditorView.xaml.cs">
-      <DependentUpon>ExcelEditorView.xaml</DependentUpon>
+    <Compile Include="Views\EVReaderView.xaml.cs">
+      <DependentUpon>EVReaderView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ExcelReaderView.xaml.cs">
+      <DependentUpon>ExcelReaderView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\BoreholeManagementView.xaml.cs">
       <DependentUpon>BoreholeManagementView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LASReaderView.xaml.cs">
+      <DependentUpon>LASReaderView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ViewportView.xaml.cs">
       <DependentUpon>ViewportView.xaml</DependentUpon>
@@ -160,11 +167,19 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\ExcelEditorView.xaml">
+    <Page Include="Views\EVReaderView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ExcelReaderView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\BoreholeManagementView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LASReaderView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

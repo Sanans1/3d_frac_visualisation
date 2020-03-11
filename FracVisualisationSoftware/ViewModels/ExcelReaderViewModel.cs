@@ -17,7 +17,7 @@ using OfficeOpenXml;
 
 namespace FracVisualisationSoftware.ViewModels
 {
-    public class ExcelEditorViewModel : ViewModelBase
+    public class ExcelReaderViewModel : ViewModelBase
     {
         #region fields
 
@@ -31,6 +31,8 @@ namespace FracVisualisationSoftware.ViewModels
         private ExcelWorkbook _excelWorkbook;
         private ExcelWorksheet _excelWorksheet;
         private ExcelRange _excelUsedRange;
+
+        private string _nameText;
 
         private string _excelFileName;
 
@@ -47,14 +49,15 @@ namespace FracVisualisationSoftware.ViewModels
         private string _zColumnHeading; //Northing
         private bool? _zColumnFound;
 
+
         #endregion fields
 
         #region properties
 
-        public string ExcelFileName
+        public string NameText
         {
-            get { return _excelFileName; }
-            set { _excelFileName = value; RaisePropertyChanged(() => ExcelFileName); }
+            get => _nameText;
+            set { _nameText = value; RaisePropertyChanged(); }
         }
 
         public ObservableCollection<string> ExcelWorksheetNames
@@ -140,7 +143,7 @@ namespace FracVisualisationSoftware.ViewModels
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-        public ExcelEditorViewModel(IDialogCoordinator dialogCoordinator)
+        public ExcelReaderViewModel(IDialogCoordinator dialogCoordinator)
         {
             _dialogCoordinator = dialogCoordinator;
 
@@ -197,10 +200,9 @@ namespace FracVisualisationSoftware.ViewModels
                 progressDialogController.SetProgress(25);
                 progressDialogController.SetMessage("Starting Excel process...");
 
-                string excelFilePath = filePath;
-                ExcelFileName = excelFilePath.Substring(excelFilePath.LastIndexOf('\\') + 1);
+                _excelFileName = filePath.Substring(filePath.LastIndexOf('\\') + 1);
 
-                _excelApplication = new ExcelPackage(new FileInfo(excelFilePath));
+                _excelApplication = new ExcelPackage(new FileInfo(filePath));
 
                 progressDialogController.SetProgress(50);
                 progressDialogController.SetMessage("Opening Excel Workbook...");
@@ -225,7 +227,7 @@ namespace FracVisualisationSoftware.ViewModels
         {
             if (XColumnFound != null && YColumnFound != null && ZColumnFound != null)
             {
-                return (!string.IsNullOrWhiteSpace(ExcelFileName) && XColumnFound.Value && YColumnFound.Value &&
+                return (!string.IsNullOrWhiteSpace(_excelFileName) && XColumnFound.Value && YColumnFound.Value &&
                         ZColumnFound.Value);
             }
 
@@ -315,7 +317,7 @@ namespace FracVisualisationSoftware.ViewModels
                 BoreholeModel boreholeModel = new BoreholeModel
                 {
                     ID = 0,
-                    Name = "Blah",
+                    Name = NameText,
                     TubePath = tubePath
                 };
 

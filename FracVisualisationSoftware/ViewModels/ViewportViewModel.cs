@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
@@ -30,6 +31,7 @@ namespace FracVisualisationSoftware.ViewModels
         private double _tubeLength;
         private double _tubeDiameter;
         private HelixViewport3D _camera;
+        private ObservableCollection<Visual3D> _viewportObjects;
 
         #endregion fields
 
@@ -47,7 +49,11 @@ namespace FracVisualisationSoftware.ViewModels
             set { _tubeDiameter = value; RaisePropertyChanged(); }
         }
 
-        public ObservableCollection<Visual3D> ViewportObjects { get; set; }
+        public ObservableCollection<Visual3D> ViewportObjects
+        {
+            get => _viewportObjects;
+            set => _viewportObjects = value;
+        }
 
         public HelixViewport3D Camera
         {
@@ -91,14 +97,14 @@ namespace FracVisualisationSoftware.ViewModels
 
         private void HelixViewport3DLoadedAction(HelixViewport3D viewPort)
         {
-            Camera.
+            //Camera.
         }
 
         #endregion command methods
 
         #region event methods
 
-        private void AddBoreholeMessageCallback(BoreholeModel boreholeModel)
+        private async void AddBoreholeMessageCallback(BoreholeModel boreholeModel)
         {
             if (boreholeModel == null || !boreholeModel.TubePath.Any())
                 return;
@@ -106,17 +112,15 @@ namespace FracVisualisationSoftware.ViewModels
             _tubePath.Dispatcher?.Invoke(() =>
             {
                 _tubePath = new Point3DCollection(boreholeModel.TubePath);
-
-                _tubePath.Clear();
             });
 
-            Application.Current.Dispatcher?.Invoke(() =>
+            Application.Current.Dispatcher?.InvokeAsync(() =>
             {
                 ViewportObjects.Clear();
 
                 ViewportObjects.Add(new SunLight());
 
-                ViewportObjects.Add(new TubeVisual3D {AddCaps = true, Path = _tubePath, Diameter = TubeDiameter});
+                ViewportObjects.Add(new TubeVisual3D { AddCaps = true, Path = _tubePath, Diameter = TubeDiameter });
             });
         }
 
