@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
 using System.Windows.Threading;
+using FracVisualisationSoftware.Enums;
 using FracVisualisationSoftware.Models;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -81,6 +82,7 @@ namespace FracVisualisationSoftware.ViewModels
             HelixViewport3DLoadedCommand = new RelayCommand<HelixViewport3D>(HelixViewport3DLoadedAction); //TODO Get reference to the ViewPort so we can manipulate the camera
 
             MessengerInstance.Register<BoreholeModel>(this, "Borehole Data Added",AddBoreholeMessageCallback);
+            MessengerInstance.Register<BoreholeModel>(this, "Delete BoreholeModel", DeleteBoreholeMessageCallback);
         }
 
         #endregion constructor
@@ -120,8 +122,19 @@ namespace FracVisualisationSoftware.ViewModels
 
                 ViewportObjects.Add(new SunLight());
 
-                ViewportObjects.Add(new TubeVisual3D { AddCaps = true, Path = _tubePath, Diameter = TubeDiameter });
+                TubeVisual3D tube = new TubeVisual3D {AddCaps = true, Path = _tubePath, Diameter = TubeDiameter};
+
+                tube.SetName(boreholeModel.Name);
+
+                ViewportObjects.Add(tube);
             });
+
+            MessengerInstance.Send(FlyoutToggleEnum.Close);
+        }
+
+        private async void DeleteBoreholeMessageCallback(BoreholeModel boreholeModel)
+        {
+            ViewportObjects.Remove(ViewportObjects.Single(visual3D => visual3D.GetName() == boreholeModel.Name));
         }
 
         #endregion event methods

@@ -26,6 +26,7 @@ namespace FracVisualisationSoftware
             //ViewModels
             SimpleIoc.Default.Register<ViewportViewModel>();
             SimpleIoc.Default.Register<ExcelReaderViewModel>();
+            SimpleIoc.Default.Register<LASReaderViewModel>();
             SimpleIoc.Default.Register<BoreholeManagementViewModel>();
             SimpleIoc.Default.Register<MainViewModel>();
         }
@@ -38,6 +39,11 @@ namespace FracVisualisationSoftware
         public ExcelReaderViewModel ExcelEditor
         {
             get { return ServiceLocator.Current.GetInstance<ExcelReaderViewModel>(); }
+        }
+
+        public LASReaderViewModel LASEditor
+        {
+            get { return ServiceLocator.Current.GetInstance<LASReaderViewModel>(); }
         }
 
         public BoreholeManagementViewModel BoreholeManagement

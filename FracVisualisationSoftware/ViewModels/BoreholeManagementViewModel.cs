@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using FracVisualisationSoftware.Enums;
 using FracVisualisationSoftware.Models;
@@ -28,6 +29,7 @@ namespace FracVisualisationSoftware.ViewModels
         #endregion
 
         private ObservableCollection<BoreholeModel> _boreholeModels;
+        private BoreholeModel _selectedBoreholeModel;
 
         #endregion
 
@@ -36,7 +38,13 @@ namespace FracVisualisationSoftware.ViewModels
         public ObservableCollection<BoreholeModel> BoreholeModels
         {
             get { return _boreholeModels; }
-            set { _boreholeModels = value; RaisePropertyChanged(() => BoreholeModels); }
+            set { _boreholeModels = value; RaisePropertyChanged(); }
+        }
+
+        public BoreholeModel SelectedBoreholeModel
+        {
+            get { return _selectedBoreholeModel; }
+            set { _selectedBoreholeModel = value; RaisePropertyChanged(); }
         }
 
         #endregion
@@ -50,6 +58,9 @@ namespace FracVisualisationSoftware.ViewModels
             BoreholeModels = new ObservableCollection<BoreholeModel>();
 
             AddBoreholeCommand = new RelayCommand(AddBoreholeAction);
+            RemoveBoreholeCommand = new RelayCommand(RemoveBoreholeAction);
+
+            MessengerInstance.Register<BoreholeModel>(this, "Borehole Data Added", AddBoreholeToList);
         }
 
         #endregion
@@ -57,6 +68,7 @@ namespace FracVisualisationSoftware.ViewModels
         #region commands
 
         public ICommand AddBoreholeCommand { get; }
+        public ICommand RemoveBoreholeCommand { get; }
 
         #endregion
 
@@ -82,26 +94,37 @@ namespace FracVisualisationSoftware.ViewModels
                         case ".xls":
                         case ".xlsx":
                         case ".xlsm":
-                            MessengerInstance.Send(openFileDialog.FileName, "Excel File Selected");
-                            MessengerInstance.Send(FlyoutToggleEnum.ExcelBoreholeParsing);
+                            MessengerInstance.Send(openFileDialog.FileName, FlyoutToggleEnum.ExcelBorehole);
+                            MessengerInstance.Send(FlyoutToggleEnum.ExcelBorehole);
                             break;
                         case ".las":
-                            MessengerInstance.Send(openFileDialog.FileName, "LAS File Selected");
-                            MessengerInstance.Send(FlyoutToggleEnum.LASBoreholeParsing);
+                            MessengerInstance.Send(openFileDialog.FileName, FlyoutToggleEnum.LASBorehole);
+                            MessengerInstance.Send(FlyoutToggleEnum.LASBorehole);
                             break;
                         case ".dat":
                         case ".path":
                         case ".pdat":
                         case ".prod":
                         case ".tops":
-                            MessengerInstance.Send(openFileDialog.FileName, "EarthVision File Selected");
-                            MessengerInstance.Send(FlyoutToggleEnum.EVBoreholeParsing);
+                            MessengerInstance.Send(openFileDialog.FileName, FlyoutToggleEnum.EVBorehole);
+                            MessengerInstance.Send(FlyoutToggleEnum.EVBorehole);
                             break;
                     }
                 }
-            });
 
-            await progressDialogController.CloseAsync();
+                progressDialogController.CloseAsync();
+            });
+        }
+
+        private async void RemoveBoreholeAction()
+        {
+            MessengerInstance.Send(SelectedBoreholeModel, "Delete BoreholeModel");
+            BoreholeModels.Remove(SelectedBoreholeModel);
+        }
+
+        private void AddBoreholeToList(BoreholeModel boreholeModel)
+        {
+            Application.Current.Dispatcher?.InvokeAsync(() => { BoreholeModels.Add(boreholeModel); });
         }
 
         #endregion

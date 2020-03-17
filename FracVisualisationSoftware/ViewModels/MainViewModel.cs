@@ -49,26 +49,9 @@ namespace FracVisualisationSoftware.ViewModels
 
         private void FlyoutToggle(FlyoutToggleEnum flyoutToggleEnum)
         {
-            switch (flyoutToggleEnum)
-            {
-                case FlyoutToggleEnum.ExcelBoreholeParsing:
-                    IsExcelFlyoutOpen = !IsExcelFlyoutOpen;
-                    IsLASFlyoutOpen = false;
-                    IsEVFlyoutOpen = false;
-                    break;
-                case FlyoutToggleEnum.LASBoreholeParsing:
-                    IsExcelFlyoutOpen = false;
-                    IsLASFlyoutOpen = !IsLASFlyoutOpen;
-                    IsEVFlyoutOpen = false;
-                    break;
-                case FlyoutToggleEnum.EVBoreholeParsing:
-                    IsExcelFlyoutOpen = false;
-                    IsLASFlyoutOpen = false;
-                    IsEVFlyoutOpen = !IsEVFlyoutOpen;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(flyoutToggleEnum), flyoutToggleEnum, null);
-            }
+            IsExcelFlyoutOpen = flyoutToggleEnum == FlyoutToggleEnum.ExcelBorehole && !IsExcelFlyoutOpen;
+            IsLASFlyoutOpen = flyoutToggleEnum == FlyoutToggleEnum.LASBorehole && !IsLASFlyoutOpen;
+            IsEVFlyoutOpen = flyoutToggleEnum == FlyoutToggleEnum.EVBorehole && !IsEVFlyoutOpen;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
+using FracVisualisationSoftware.Enums;
 using FracVisualisationSoftware.Extensions;
 using FracVisualisationSoftware.Models;
 using GalaSoft.MvvmLight;
@@ -76,10 +78,19 @@ namespace FracVisualisationSoftware.ViewModels
             get { return _selectedExcelWorksheetIndex; }
             set
             {
+                if (_excelWorkbook == null) return;
+
                 _selectedExcelWorksheetIndex = value + 1;
 
-                _excelWorksheet = _excelWorkbook.Worksheets[_selectedExcelWorksheetIndex];
-                _excelUsedRange = _excelWorksheet.Cells;
+                try
+                {
+                    _excelWorksheet = _excelWorkbook.Worksheets[_selectedExcelWorksheetIndex];
+                    _excelUsedRange = _excelWorksheet.Cells;
+                }
+                catch
+                {
+                    // ignored
+                }
 
                 RaisePropertyChanged(() => SelectedExcelWorksheetIndex);
             }
@@ -150,10 +161,9 @@ namespace FracVisualisationSoftware.ViewModels
             _excelCollectionLock = new object();
             ExcelWorksheetNames = new ObservableCollection<string>();
 
-            //SelectExcelFileCommand = new RelayCommand(SelectExcelFileAction);
             ReadExcelFileCommand = new RelayCommand(ReadExcelFileAction, CanReadExcelFileAction);
 
-            MessengerInstance.Register<string>(this, "Excel File Selected", SelectExcelFileAction);
+            MessengerInstance.Register<string>(this, FlyoutToggleEnum.ExcelBorehole, SelectExcelFileAction);
         }
 
         #endregion constructor
@@ -169,6 +179,8 @@ namespace FracVisualisationSoftware.ViewModels
 
         private bool? HeadingValidation(string columnHeading)
         {
+            if (_excelUsedRange == null) return null;
+
             IEnumerable<ExcelRangeBase> foundCell = from cell in _excelUsedRange where cell.Value?.ToString() == columnHeading select cell;
 
             if (string.IsNullOrWhiteSpace(columnHeading))
@@ -182,6 +194,20 @@ namespace FracVisualisationSoftware.ViewModels
             }
 
             return true;
+        }
+
+        private void ResetProperties()
+        {
+            _excelApplication = null;
+            _excelWorkbook = null;
+            _excelWorksheet = null;
+            _excelUsedRange = null;
+            NameText = null;
+            _excelFileName = null;
+            ExcelWorksheetNames = new ObservableCollection<string>();
+            XColumnHeading = null;
+            YColumnHeading = null;
+            ZColumnHeading = null;
         }
 
         #region command methods
@@ -325,6 +351,8 @@ namespace FracVisualisationSoftware.ViewModels
             });
 
             await progressDialogController.CloseAsync();
+
+            ResetProperties();
         }
 
         #endregion command methods

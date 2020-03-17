@@ -48,7 +48,7 @@
             <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsExcelFlyoutOpen}" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:MetroWindow}, Path=ActualWidth, Converter={converters1:MathConverter}, ConverterParameter=x/2}">
                 <views:ExcelEditorView/>
             </mah:Flyout>
-            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsLASFlyoutOpeny}" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:MetroWindow}, Path=ActualWidth, Converter={converters1:MathConverter}, ConverterParameter=x/2}">
+            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsLASFlyoutOpen}" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:MetroWindow}, Path=ActualWidth, Converter={converters1:MathConverter}, ConverterParameter=x/2}">
                 <views:LASReaderView/>
             </mah:Flyout>
             <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsEVFlyoutOpen}" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:MetroWindow}, Path=ActualWidth, Converter={converters1:MathConverter}, ConverterParameter=x/2}">

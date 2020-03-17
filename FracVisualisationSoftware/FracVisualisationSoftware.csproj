@@ -131,12 +131,15 @@
     <Compile Include="Enums\VisualModeEnum.cs" />
     <Compile Include="Extensions\MathExtensionMethods.cs" />
     <Compile Include="Models\BoreholeModel.cs" />
+    <Compile Include="Models\LASInformationModel.cs" />
+    <Compile Include="Models\LASSectionModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Services\Implementations\Parsing\ExcelParsingService.cs" />
     <Compile Include="Services\Implementations\Parsing\LASParsingService.cs" />
     <Compile Include="Services\Implementations\Parsing\OtherParsingService.cs" />
     <Compile Include="ViewModelLocator.cs" />
     <Compile Include="ViewModels\BoreholeManagementViewModel.cs" />
+    <Compile Include="ViewModels\LASReaderViewModel.cs" />
     <Compile Include="ViewModels\ExcelReaderViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ViewportViewModel.cs" />

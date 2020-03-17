@@ -8,8 +8,9 @@ namespace FracVisualisationSoftware.Enums
 {
     public enum FlyoutToggleEnum
     {
-        ExcelBoreholeParsing,
-        LASBoreholeParsing,
-        EVBoreholeParsing
+        ExcelBorehole,
+        LASBorehole,
+        EVBorehole,
+        Close
     }
 }
