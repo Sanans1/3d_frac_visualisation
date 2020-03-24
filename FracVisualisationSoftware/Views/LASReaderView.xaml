@@ -18,7 +18,9 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" SharedSizeGroup="HeadingRow"/>
+                <RowDefinition Height="Auto" SharedSizeGroup="HeadingRow"/>
+                <RowDefinition Height="Auto" SharedSizeGroup="HeadingRow"/>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" SharedSizeGroup="HeadingRow"/>
                 <RowDefinition Height="Auto" SharedSizeGroup="HeadingRow"/>
@@ -38,16 +40,22 @@
             <TextBlock Grid.Column="0" Grid.Row="3" Text="Data Section" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
             <ComboBox Grid.Column="1" Grid.Row="3" ItemsSource="{Binding Sections}" SelectedIndex="{Binding SelectedDataSectionIndex}" DisplayMemberPath="Name" Margin="{StaticResource TypicalMargin}"/>
 
-            <TextBlock Grid.Column="0" Grid.Row="4" Text="X Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
-            <ComboBox Grid.Column="1" Grid.Row="4" ItemsSource="{Binding Headings}" SelectedIndex="{Binding SelectedXHeadingIndex}" DisplayMemberPath="Name" Margin="{StaticResource TypicalMargin}"/>
+            <TextBlock Grid.Column="0" Grid.Row="4" Text="Filter Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
+            <ComboBox Grid.Column="1" Grid.Row="4" ItemsSource="{Binding Headings}" SelectedIndex="{Binding SelectedFilterHeadingIndex}" DisplayMemberPath="Name" Margin="{StaticResource TypicalMargin}"/>
 
-            <TextBlock Grid.Column="0" Grid.Row="5" Text="Y Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
-            <ComboBox Grid.Column="1" Grid.Row="5" ItemsSource="{Binding Headings}" SelectedIndex="{Binding SelectedYHeadingIndex}" DisplayMemberPath="Name" Margin="{StaticResource TypicalMargin}"/>
+            <TextBlock Grid.Column="0" Grid.Row="5" Text="Filter Text" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
+            <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding FilterText}" Margin="{StaticResource TypicalMargin}"/>
 
-            <TextBlock Grid.Column="0" Grid.Row="6" Text="Z Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
-            <ComboBox Grid.Column="1" Grid.Row="6" ItemsSource="{Binding Headings}" SelectedIndex="{Binding SelectedZHeadingIndex}" DisplayMemberPath="Name" Margin="{StaticResource TypicalMargin}"/>
+            <TextBlock Grid.Column="0" Grid.Row="6" Text="X Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
+            <ComboBox Grid.Column="1" Grid.Row="6" ItemsSource="{Binding Headings}" SelectedIndex="{Binding SelectedXHeadingIndex}" DisplayMemberPath="Name" Margin="{StaticResource TypicalMargin}"/>
 
-            <Button Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="7" Command="{Binding ReadLASFileCommand}" Content="Read" Margin="{StaticResource TypicalMargin}"/>
+            <TextBlock Grid.Column="0" Grid.Row="7" Text="Y Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
+            <ComboBox Grid.Column="1" Grid.Row="7" ItemsSource="{Binding Headings}" SelectedIndex="{Binding SelectedYHeadingIndex}" DisplayMemberPath="Name" Margin="{StaticResource TypicalMargin}"/>
+
+            <TextBlock Grid.Column="0" Grid.Row="8" Text="Z Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
+            <ComboBox Grid.Column="1" Grid.Row="8" ItemsSource="{Binding Headings}" SelectedIndex="{Binding SelectedZHeadingIndex}" DisplayMemberPath="Name" Margin="{StaticResource TypicalMargin}"/>
+
+            <Button Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="9" Command="{Binding ReadLASFileCommand}" Content="Read" Margin="{StaticResource TypicalMargin}"/>
         </Grid>
     </GroupBox>
 </UserControl>

@@ -139,6 +139,7 @@
     <Compile Include="Services\Implementations\Parsing\OtherParsingService.cs" />
     <Compile Include="ViewModelLocator.cs" />
     <Compile Include="ViewModels\BoreholeManagementViewModel.cs" />
+    <Compile Include="ViewModels\EVReaderViewModel.cs" />
     <Compile Include="ViewModels\LASReaderViewModel.cs" />
     <Compile Include="ViewModels\ExcelReaderViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />

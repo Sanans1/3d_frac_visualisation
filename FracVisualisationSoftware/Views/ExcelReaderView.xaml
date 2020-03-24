@@ -19,6 +19,8 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" SharedSizeGroup="HeadingRow"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" SharedSizeGroup="HeadingRow"/>
                 <RowDefinition Height="Auto" SharedSizeGroup="HeadingRow"/>
                 <RowDefinition Height="Auto" SharedSizeGroup="HeadingRow"/>
                 <RowDefinition Height="Auto"/>
@@ -30,8 +32,30 @@
             <TextBlock Grid.Column="0" Grid.Row="1" Text="Select Worksheet" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
             <ComboBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding ExcelWorksheetNames}" SelectedIndex="{Binding SelectedExcelWorksheetIndex}" Margin="{StaticResource TypicalMargin}"/>
 
-            <TextBlock Grid.Column="0" Grid.Row="2" Text="X Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
-            <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding XColumnHeading, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"  Margin="{StaticResource TypicalMargin}" ToolTip="Example: Easting">
+            <TextBlock Grid.Column="0" Grid.Row="2" Text="Filter Columns Heading Cell" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
+            <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding FilterColumnHeading, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"  Margin="{StaticResource TypicalMargin}">
+                <TextBox.Style>
+                    <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding FilterColumnHeadingFound}" Value="True">
+                                <Setter Property="BorderBrush" Value="ForestGreen"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding FilterColumnHeadingFound}" Value="False">
+                                <Setter Property="BorderBrush" Value="Red"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding FilterColumnHeadingFound}" Value="{x:Null}">
+                                <Setter Property="BorderBrush" Value="{StaticResource MaterialDesignTextBoxBorder}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+
+            <TextBlock Grid.Column="0" Grid.Row="3" Text="Filter Text" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
+            <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"  Margin="{StaticResource TypicalMargin}"/>
+
+            <TextBlock Grid.Column="0" Grid.Row="4" Text="X Column Heading Cell" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
+            <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding XColumnHeading, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"  Margin="{StaticResource TypicalMargin}" ToolTip="Example: Easting">
                 <TextBox.Style>
                     <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
                         <Style.Triggers>
@@ -49,8 +73,8 @@
                 </TextBox.Style>
             </TextBox>
 
-            <TextBlock Grid.Column="0" Grid.Row="3" Text="Y Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
-            <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding YColumnHeading, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}" ToolTip="Example: TVD">
+            <TextBlock Grid.Column="0" Grid.Row="5" Text="Y Column Heading Cell" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
+            <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding YColumnHeading, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}" ToolTip="Example: TVD">
                 <TextBox.Style>
                     <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
                         <Style.Triggers>
@@ -68,8 +92,8 @@
                 </TextBox.Style>
             </TextBox>
 
-            <TextBlock Grid.Column="0" Grid.Row="4" Text="Z Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
-            <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding ZColumnHeading, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}" ToolTip="Example: Northing">
+            <TextBlock Grid.Column="0" Grid.Row="6" Text="Z Column Heading Celll" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
+            <TextBox Grid.Column="1" Grid.Row="6" Text="{Binding ZColumnHeading, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}" ToolTip="Example: Northing">
                 <TextBox.Style>
                     <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
                         <Style.Triggers>
@@ -86,7 +110,7 @@
                     </Style>
                 </TextBox.Style>
             </TextBox>
-            <Button Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5" Command="{Binding ReadExcelFileCommand}" Content="Read" Margin="{StaticResource TypicalMargin}"/>
+            <Button Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="7" Command="{Binding ReadExcelFileCommand}" Content="Read" Margin="{StaticResource TypicalMargin}"/>
         </Grid>
     </GroupBox>
 </UserControl>

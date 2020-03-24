@@ -42,6 +42,9 @@ namespace FracVisualisationSoftware.ViewModels
         private ObservableCollection<string> _excelWorksheetNames;
         private int _selectedExcelWorksheetIndex;
 
+        private string _filterColumnHeading;
+        private bool? _filterColumnFound;
+
         private string _xColumnHeading; //Easting
         private bool? _xColumnFound;
 
@@ -51,6 +54,7 @@ namespace FracVisualisationSoftware.ViewModels
         private string _zColumnHeading; //Northing
         private bool? _zColumnFound;
 
+        private string _filterText;
 
         #endregion fields
 
@@ -94,6 +98,23 @@ namespace FracVisualisationSoftware.ViewModels
 
                 RaisePropertyChanged(() => SelectedExcelWorksheetIndex);
             }
+        }
+
+        public string FilterColumnHeading
+        {
+            get { return _filterColumnHeading; }
+            set
+            {
+                _filterColumnHeading = value;
+                FilterColumnHeadingFound = HeadingValidation(value);
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool? FilterColumnHeadingFound
+        {
+            get { return _filterColumnFound; }
+            set { _filterColumnFound = value; RaisePropertyChanged(); }
         }
 
         public string XColumnHeading
@@ -147,6 +168,12 @@ namespace FracVisualisationSoftware.ViewModels
             set { _zColumnFound = value; RaisePropertyChanged(() => ZColumnFound); }
         }
 
+        public string FilterText
+        {
+            get { return _filterText; }
+            set { _filterText = value; RaisePropertyChanged(); }
+        }
+
         #endregion properties
 
         #region constructor
@@ -181,14 +208,20 @@ namespace FracVisualisationSoftware.ViewModels
         {
             if (_excelUsedRange == null) return null;
 
-            IEnumerable<ExcelRangeBase> foundCell = from cell in _excelUsedRange where cell.Value?.ToString() == columnHeading select cell;
+            if (string.IsNullOrWhiteSpace(columnHeading)) return null;
 
-            if (string.IsNullOrWhiteSpace(columnHeading))
+            ExcelRangeBase foundCell;
+
+            try
             {
-                return null;
+                foundCell = _excelUsedRange.Single(cell => cell.Address == columnHeading);
+            }
+            catch
+            {
+                return false;
             }
 
-            if (!foundCell.Any())
+            if (foundCell.Value == null)
             {
                 return false;
             }
@@ -267,15 +300,17 @@ namespace FracVisualisationSoftware.ViewModels
 
             await Task.Run(() =>
             {
-                IEnumerable<ExcelRangeBase> xColumn = from cell in _excelUsedRange where cell.Value?.ToString() == _xColumnHeading select cell;
+                IEnumerable<ExcelRangeBase> xColumn = _excelUsedRange.Single(cell => cell.Address == _xColumnHeading);
 
                 progressDialogController.SetProgress(33);
 
-                IEnumerable<ExcelRangeBase> yColumn = from cell in _excelUsedRange where cell.Value?.ToString() == _yColumnHeading select cell;
+                IEnumerable<ExcelRangeBase> yColumn = _excelUsedRange.Single(cell => cell.Address == _yColumnHeading);
 
                 progressDialogController.SetProgress(66);
 
-                IEnumerable<ExcelRangeBase> zColumn = from cell in _excelUsedRange where cell.Value?.ToString() == _zColumnHeading select cell;
+                IEnumerable<ExcelRangeBase> zColumn = _excelUsedRange.Single(cell => cell.Address == _zColumnHeading);
+
+                IEnumerable<ExcelRangeBase> filterColumn = _excelUsedRange.Single(cell => cell.Address == _filterColumnHeading);
 
                 progressDialogController.SetMessage("Headings found...");
                 progressDialogController.SetProgress(100);
@@ -301,7 +336,9 @@ namespace FracVisualisationSoftware.ViewModels
                 while (!allValuesParsed)
                 {
                     object cellValue = _excelWorksheet.Cells[currentRow, xColumn.First().Start.Column].Value;
-                    if (cellValue.IsNumeric())
+                    bool shouldUse = string.IsNullOrWhiteSpace(_filterText) || ((string) _excelWorksheet.Cells[currentRow, filterColumn.First().Start.Column].Value).Contains(_filterText);
+
+                    if (cellValue.IsNumeric() && shouldUse)
                     {
                         if (!initalValuesSet)
                         {
