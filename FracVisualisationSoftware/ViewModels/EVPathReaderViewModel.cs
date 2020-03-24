@@ -3,25 +3,21 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
 using FracVisualisationSoftware.Enums;
-using FracVisualisationSoftware.Extensions;
 using FracVisualisationSoftware.Models;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using GalaSoft.MvvmLight.Messaging;
 using HelixToolkit;
 using MahApps.Metro.Controls.Dialogs;
-using Microsoft.Win32;
-using OfficeOpenXml;
-using Geometry3D = HelixToolkit.Wpf.SharpDX.Geometry3D;
 
 namespace FracVisualisationSoftware.ViewModels
 {
-    public class LASReaderViewModel : ViewModelBase
+    public class EVPathReaderViewModel : ViewModelBase
     {
         #region fields
 
@@ -30,19 +26,16 @@ namespace FracVisualisationSoftware.ViewModels
         private IDialogCoordinator _dialogCoordinator;
 
         #endregion injected fields
-        
-        private string _nameText;
-        
-        private readonly object _sectionsCollectionLock;
-        private ObservableCollection<LASSectionModel> _sections;
-        private int _selectedCurveSectionIndex;
-        private int _selectedDataSectionIndex;
 
-        private double _nullValue;
+        private string _nameText;
+
+        private string _evFileName;
+
+        private List<string> _content;
 
         private readonly object _headingCollectionLock;
-        private ObservableCollection<LASInformationModel> _headings;
-        private int _selectedFilterHeadingIndex;
+        private ObservableCollection<string> _headings;
+        private int _selectedFilterColumnIndex;
         private int _selectedXHeadingIndex;
         private int _selectedYHeadingIndex;
         private int _selectedZHeadingIndex;
@@ -59,59 +52,15 @@ namespace FracVisualisationSoftware.ViewModels
             set { _nameText = value; RaisePropertyChanged(); }
         }
 
-        public ObservableCollection<LASSectionModel> Sections
+        public ObservableCollection<string> Headings
         {
-            get { return _sections; }
-            set
-            {
-                _sections = value;
-                BindingOperations.EnableCollectionSynchronization(_sections, _sectionsCollectionLock);
-                RaisePropertyChanged();
-            }
-        }
-
-        public int SelectedCurveSectionIndex
-        {
-            get { return _selectedCurveSectionIndex; }
-            set 
-            { 
-                _selectedCurveSectionIndex = value;
-                SetHeadings();
-                RaisePropertyChanged();
-            }
-        }
-
-        public int SelectedDataSectionIndex
-        {
-            get { return _selectedDataSectionIndex; }
-            set
-            {
-                _selectedDataSectionIndex = value; 
-                RaisePropertyChanged();
-            }
-        }
-
-        public double NullValue
-        {
-            get { return _nullValue; }
-            set { _nullValue = value; RaisePropertyChanged(); }
-        }
-
-        public ObservableCollection<LASInformationModel> Headings
-        {
-            get { return _headings; }
+            get => _headings;
             set
             {
                 _headings = value;
                 BindingOperations.EnableCollectionSynchronization(_headings, _headingCollectionLock);
                 RaisePropertyChanged();
             }
-        }
-
-        public int SelectedFilterHeadingIndex
-        {
-            get { return _selectedFilterHeadingIndex; }
-            set { _selectedFilterHeadingIndex = value; RaisePropertyChanged(); }
         }
 
         public int SelectedXHeadingIndex
@@ -132,6 +81,12 @@ namespace FracVisualisationSoftware.ViewModels
             set { _selectedZHeadingIndex = value; RaisePropertyChanged(); }
         }
 
+        public int SelectedFilterColumnIndex
+        {
+            get => _selectedFilterColumnIndex;
+            set { _selectedFilterColumnIndex = value; RaisePropertyChanged(); }
+        }
+
         public string FilterText
         {
             get => _filterText;
@@ -145,26 +100,25 @@ namespace FracVisualisationSoftware.ViewModels
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-        public LASReaderViewModel(IDialogCoordinator dialogCoordinator)
+        public EVPathReaderViewModel(IDialogCoordinator dialogCoordinator)
         {
             _dialogCoordinator = dialogCoordinator;
 
-            _sectionsCollectionLock = new object();
-            Sections = new ObservableCollection<LASSectionModel>();
-
             _headingCollectionLock = new object();
-            Headings = new ObservableCollection<LASInformationModel>();
+            Headings = new ObservableCollection<string>();
 
-            ReadLASFileCommand = new RelayCommand(ReadLASFileAction, CanReadLASFileAction);
+            _content = new List<string>();
 
-            MessengerInstance.Register<string>(this, FlyoutToggleEnum.LASBorehole, SelectLASFileAction);
+            ReadEVFileCommand = new RelayCommand(ReadEVFileAction, CanReadEVFileAction);
+
+            MessengerInstance.Register<string>(this, FlyoutToggleEnum.EVBorehole, SelectEVFileAction);
         }
 
         #endregion constructor
 
         #region commands
 
-        public ICommand ReadLASFileCommand { get; }
+        public ICommand ReadEVFileCommand { get; }
 
         #endregion commands 
 
@@ -173,34 +127,7 @@ namespace FracVisualisationSoftware.ViewModels
         private void ResetProperties()
         {
             NameText = null;
-            Sections = new ObservableCollection<LASSectionModel>();
-            Headings = new ObservableCollection<LASInformationModel>();
-        }
-
-        private void SetHeadings()
-        {
-            try
-            {
-                Headings.Clear();
-
-                LASSectionModel lasSectionModel = Sections[SelectedCurveSectionIndex];
-
-                lasSectionModel.Content.ForEach(content =>
-                {
-                    LASInformationModel lasInformationModel = new LASInformationModel();
-
-                    string[] splitContent = content.SplitOnWhitespace();
-
-                    lasInformationModel.Name = splitContent[0];
-                    lasInformationModel.MeasurementUnit = splitContent[1];
-
-                    Headings.Add(lasInformationModel);
-                });
-            }
-            catch
-            {
-                // ignored
-            }
+            Headings = new ObservableCollection<string>();
         }
 
         #region command methods
@@ -209,42 +136,34 @@ namespace FracVisualisationSoftware.ViewModels
         /// Opens a OpenFileDialog to allow the user to select an Excel file.
         /// This also populates the Worksheet dropdown with names of Worksheets.
         /// </summary>
-        private async void SelectLASFileAction(string filePath)
+        private async void SelectEVFileAction(string filePath)
         {
             ProgressDialogController progressDialogController = await _dialogCoordinator.ShowProgressAsync(this, "Please wait...", "Awaiting user to select file...");
             progressDialogController.Maximum = 100;
 
-            await Task.Run(() => 
+            await Task.Run(() =>
             {
                 progressDialogController.SetProgress(33);
                 progressDialogController.SetMessage("Opening file...");
 
                 progressDialogController.SetProgress(66);
-                progressDialogController.SetMessage("Reading Sections...");
+                progressDialogController.SetMessage("Reading Fields...");
 
                 using (StreamReader reader = new StreamReader(filePath))
                 {
-                    string line = reader.ReadLine();
-
                     while (!reader.EndOfStream)
                     {
-                        if (line != null && line.StartsWith("~"))
+                        string line = reader.ReadLine();
+                        if (line != null)
                         {
-                            LASSectionModel newSection = new LASSectionModel
+                            if (line.StartsWith("# Field:"))
                             {
-                                Name = line
-                            };
-
-                            newSection.Content = new List<string>();
-                            line = reader.ReadLine();
-
-                            while (line != null && !line.StartsWith("~"))
-                            {
-                                newSection.Content.Add(line);
-                                line = reader.ReadLine();
+                                Headings.Add(line.Replace("# Field:", ""));
                             }
-
-                            Sections.Add(newSection);
+                            else if (!line.StartsWith("#"))
+                            {
+                                _content.Add(line);
+                            }
                         }
                     }
                 }
@@ -253,7 +172,7 @@ namespace FracVisualisationSoftware.ViewModels
             await progressDialogController.CloseAsync();
         }
 
-        private bool CanReadLASFileAction()
+        private bool CanReadEVFileAction()
         {
             try
             {
@@ -270,7 +189,7 @@ namespace FracVisualisationSoftware.ViewModels
             return false;
         }
 
-        private async void ReadLASFileAction()
+        private async void ReadEVFileAction()
         {
             ProgressDialogController progressDialogController = await _dialogCoordinator.ShowProgressAsync(this, "Please wait...", "Finding headings...");
             progressDialogController.Maximum = 100;
@@ -287,19 +206,20 @@ namespace FracVisualisationSoftware.ViewModels
 
                 int currentRow = 0;
 
-                int numberOfRows = Sections[SelectedDataSectionIndex].Content.Count();
+                int numberOfRows = _content.Count();
+
+                bool allValuesParsed = false;
 
                 progressDialogController.SetMessage("Beginning to read data...");
                 progressDialogController.SetProgress(0);
                 progressDialogController.Maximum = numberOfRows;
 
-                foreach (string line in Sections[SelectedDataSectionIndex].Content)
+                foreach (string line in _content)
                 {
-                    string[] splitLine = line.SplitOnWhitespace();
+                    string[] splitLine = line.Split("\t".ToCharArray());
 
-                    if (string.IsNullOrWhiteSpace(_filterText) || splitLine[SelectedFilterHeadingIndex].Contains(_filterText))
+                    if (splitLine[_selectedFilterColumnIndex].Contains(_filterText))
                     {
-
                         if (!initalValuesSet)
                         {
                             initialX = double.Parse(splitLine[SelectedXHeadingIndex]) * -1;
@@ -313,14 +233,9 @@ namespace FracVisualisationSoftware.ViewModels
                         double y = double.Parse(splitLine[SelectedYHeadingIndex]) * -1;
                         double z = double.Parse(splitLine[SelectedZHeadingIndex]) * -1;
 
-                        if (x == NullValue) x = 0;
-                        else x -= initialX;
-
-                        if (y == NullValue) y = 0;
-                        else y -= initialY;
-
-                        if (z == NullValue) z = 0;
-                        else z -= initialZ;
+                        x -= initialX;
+                        y -= initialY;
+                        z -= initialZ;
 
                         tubePath.Add(new Point3D(x, y, z));
                     }
@@ -349,6 +264,5 @@ namespace FracVisualisationSoftware.ViewModels
         #endregion command methods
 
         #endregion methods
-
     }
 }

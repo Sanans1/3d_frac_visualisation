@@ -139,22 +139,22 @@
     <Compile Include="Services\Implementations\Parsing\OtherParsingService.cs" />
     <Compile Include="ViewModelLocator.cs" />
     <Compile Include="ViewModels\BoreholeManagementViewModel.cs" />
-    <Compile Include="ViewModels\EVReaderViewModel.cs" />
-    <Compile Include="ViewModels\LASReaderViewModel.cs" />
-    <Compile Include="ViewModels\ExcelReaderViewModel.cs" />
+    <Compile Include="ViewModels\EVPathReaderViewModel.cs" />
+    <Compile Include="ViewModels\LASPathReaderViewModel.cs" />
+    <Compile Include="ViewModels\ExcelPathReaderViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ViewportViewModel.cs" />
-    <Compile Include="Views\EVReaderView.xaml.cs">
-      <DependentUpon>EVReaderView.xaml</DependentUpon>
+    <Compile Include="Views\EVPathReaderView.xaml.cs">
+      <DependentUpon>EVPathReaderView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ExcelReaderView.xaml.cs">
-      <DependentUpon>ExcelReaderView.xaml</DependentUpon>
+    <Compile Include="Views\ExcelPathReaderView.xaml.cs">
+      <DependentUpon>ExcelPathReaderView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\BoreholeManagementView.xaml.cs">
       <DependentUpon>BoreholeManagementView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\LASReaderView.xaml.cs">
-      <DependentUpon>LASReaderView.xaml</DependentUpon>
+    <Compile Include="Views\LASPathReaderView.xaml.cs">
+      <DependentUpon>LASPathReaderView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ViewportView.xaml.cs">
       <DependentUpon>ViewportView.xaml</DependentUpon>
@@ -171,11 +171,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\EVReaderView.xaml">
+    <Page Include="Views\EVPathReaderView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ExcelReaderView.xaml">
+    <Page Include="Views\ExcelPathReaderView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -183,7 +183,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\LASReaderView.xaml">
+    <Page Include="Views\LASPathReaderView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

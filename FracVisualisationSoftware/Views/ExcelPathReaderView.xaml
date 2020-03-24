@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="FracVisualisationSoftware.Views.ExcelEditorView"
+﻿<UserControl x:Class="FracVisualisationSoftware.Views.ExcelPathReaderView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:FracVisualisationSoftware.Views"
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
-             DataContext="{Binding ExcelEditor, Source={StaticResource Locator}}"
+             DataContext="{Binding ExcelPathReader, Source={StaticResource Locator}}"
              mah:DialogParticipation.Register="{Binding}"
              d:DesignHeight="450" d:DesignWidth="400">
     <GroupBox Header="Excel Reader" BorderThickness="{StaticResource GroupBorder}">

@@ -25,9 +25,9 @@ namespace FracVisualisationSoftware
 
             //ViewModels
             SimpleIoc.Default.Register<ViewportViewModel>();
-            SimpleIoc.Default.Register<ExcelReaderViewModel>();
-            SimpleIoc.Default.Register<LASReaderViewModel>();
-            SimpleIoc.Default.Register<EVReaderViewModel>();
+            SimpleIoc.Default.Register<ExcelPathReaderViewModel>();
+            SimpleIoc.Default.Register<LASPathReaderViewModel>();
+            SimpleIoc.Default.Register<EVPathReaderViewModel>();
             SimpleIoc.Default.Register<BoreholeManagementViewModel>();
             SimpleIoc.Default.Register<MainViewModel>();
         }
@@ -37,19 +37,19 @@ namespace FracVisualisationSoftware
             get { return ServiceLocator.Current.GetInstance<ViewportViewModel>(); }
         }
 
-        public ExcelReaderViewModel ExcelEditor
+        public ExcelPathReaderViewModel ExcelPathReader
         {
-            get { return ServiceLocator.Current.GetInstance<ExcelReaderViewModel>(); }
+            get { return ServiceLocator.Current.GetInstance<ExcelPathReaderViewModel>(); }
         }
 
-        public LASReaderViewModel LASEditor
+        public LASPathReaderViewModel LasPathReader
         {
-            get { return ServiceLocator.Current.GetInstance<LASReaderViewModel>(); }
+            get { return ServiceLocator.Current.GetInstance<LASPathReaderViewModel>(); }
         }
 
-        public EVReaderViewModel EVEditor
+        public EVPathReaderViewModel EvPathReader
         {
-            get { return ServiceLocator.Current.GetInstance<EVReaderViewModel>(); }
+            get { return ServiceLocator.Current.GetInstance<EVPathReaderViewModel>(); }
         }
 
         public BoreholeManagementViewModel BoreholeManagement

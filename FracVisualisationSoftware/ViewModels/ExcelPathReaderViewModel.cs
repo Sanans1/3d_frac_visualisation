@@ -19,7 +19,7 @@ using OfficeOpenXml;
 
 namespace FracVisualisationSoftware.ViewModels
 {
-    public class ExcelReaderViewModel : ViewModelBase
+    public class ExcelPathReaderViewModel : ViewModelBase
     {
         #region fields
 
@@ -181,7 +181,7 @@ namespace FracVisualisationSoftware.ViewModels
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-        public ExcelReaderViewModel(IDialogCoordinator dialogCoordinator)
+        public ExcelPathReaderViewModel(IDialogCoordinator dialogCoordinator)
         {
             _dialogCoordinator = dialogCoordinator;
 
