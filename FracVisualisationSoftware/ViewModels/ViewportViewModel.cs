@@ -13,6 +13,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using HelixToolkit.Wpf;
 using MahApps.Metro.Controls.Dialogs;
+using OfficeOpenXml.Packaging.Ionic.Zip;
 using Camera = HelixToolkit.Wpf.SharpDX.Camera;
 
 namespace FracVisualisationSoftware.ViewModels
@@ -81,8 +82,8 @@ namespace FracVisualisationSoftware.ViewModels
 
             HelixViewport3DLoadedCommand = new RelayCommand<HelixViewport3D>(HelixViewport3DLoadedAction); //TODO Get reference to the ViewPort so we can manipulate the camera
 
-            MessengerInstance.Register<BoreholeModel>(this, "Borehole Data Added",AddBoreholeMessageCallback);
-            MessengerInstance.Register<BoreholeModel>(this, "Delete BoreholeModel", DeleteBoreholeMessageCallback);
+            MessengerInstance.Register<WellModel>(this, "Borehole Data Added",AddBoreholeMessageCallback);
+            MessengerInstance.Register<WellModel>(this, "Delete BoreholeModel", DeleteBoreholeMessageCallback);
         }
 
         #endregion constructor
@@ -106,14 +107,14 @@ namespace FracVisualisationSoftware.ViewModels
 
         #region event methods
 
-        private async void AddBoreholeMessageCallback(BoreholeModel boreholeModel)
+        private async void AddBoreholeMessageCallback(WellModel wellModel)
         {
-            if (boreholeModel == null || !boreholeModel.TubePath.Any())
+            if (wellModel == null || !wellModel.Path.Any())
                 return;
 
             _tubePath.Dispatcher?.Invoke(() =>
             {
-                _tubePath = new Point3DCollection(boreholeModel.TubePath);
+                _tubePath = new Point3DCollection(wellModel.Path);
             });
 
             Application.Current.Dispatcher?.InvokeAsync(() =>
@@ -124,17 +125,17 @@ namespace FracVisualisationSoftware.ViewModels
 
                 TubeVisual3D tube = new TubeVisual3D {AddCaps = true, Path = _tubePath, Diameter = TubeDiameter};
 
-                tube.SetName(boreholeModel.Name);
+                tube.SetName(wellModel.Name);
 
                 ViewportObjects.Add(tube);
             });
 
-            MessengerInstance.Send(FlyoutToggleEnum.Close);
+            MessengerInstance.Send(new NotificationMessage("Close Flyout"), "Close Flyout");
         }
 
-        private async void DeleteBoreholeMessageCallback(BoreholeModel boreholeModel)
+        private async void DeleteBoreholeMessageCallback(WellModel wellModel)
         {
-            ViewportObjects.Remove(ViewportObjects.Single(visual3D => visual3D.GetName() == boreholeModel.Name));
+            ViewportObjects.Remove(ViewportObjects.Single(visual3D => visual3D.GetName() == wellModel.Name));
         }
 
         #endregion event methods

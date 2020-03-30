@@ -77,6 +77,9 @@
     <Reference Include="MaterialDesignThemes.Wpf, Version=2.5.1.1345, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignThemes.2.5.1\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
     </Reference>
@@ -127,31 +130,48 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\MathConverter.cs" />
-    <Compile Include="Enums\FlyoutToggleEnum.cs" />
-    <Compile Include="Enums\VisualModeEnum.cs" />
+    <Compile Include="Enums\FileTypeEnum.cs" />
+    <Compile Include="Enums\WellDataTypeEnum.cs" />
     <Compile Include="Extensions\MathExtensionMethods.cs" />
-    <Compile Include="Models\BoreholeModel.cs" />
+    <Compile Include="Models\FlyoutMessageModel.cs" />
+    <Compile Include="Models\WellModel.cs" />
     <Compile Include="Models\LASInformationModel.cs" />
     <Compile Include="Models\LASSectionModel.cs" />
+    <Compile Include="Models\StageModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Properties\Annotations1.cs" />
+    <Compile Include="Services\Implementations\Data\DataService.cs" />
+    <Compile Include="Services\Interfaces\Data\IDataService.cs" />
     <Compile Include="Services\Implementations\Parsing\ExcelParsingService.cs" />
     <Compile Include="Services\Implementations\Parsing\LASParsingService.cs" />
     <Compile Include="Services\Implementations\Parsing\OtherParsingService.cs" />
     <Compile Include="ViewModelLocator.cs" />
     <Compile Include="ViewModels\BoreholeManagementViewModel.cs" />
+    <Compile Include="ViewModels\EVStageReaderViewModel.cs" />
     <Compile Include="ViewModels\EVPathReaderViewModel.cs" />
+    <Compile Include="ViewModels\ExcelStageReaderViewModel.cs" />
+    <Compile Include="ViewModels\LASStageReaderViewModel.cs" />
     <Compile Include="ViewModels\LASPathReaderViewModel.cs" />
     <Compile Include="ViewModels\ExcelPathReaderViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ViewportViewModel.cs" />
+    <Compile Include="Views\EVStageReaderView.xaml.cs">
+      <DependentUpon>EVStageReaderView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EVPathReaderView.xaml.cs">
       <DependentUpon>EVPathReaderView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ExcelStageReaderView.xaml.cs">
+      <DependentUpon>ExcelStageReaderView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ExcelPathReaderView.xaml.cs">
       <DependentUpon>ExcelPathReaderView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\BoreholeManagementView.xaml.cs">
       <DependentUpon>BoreholeManagementView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LASStageReaderView.xaml.cs">
+      <DependentUpon>LASStageReaderView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LASPathReaderView.xaml.cs">
       <DependentUpon>LASPathReaderView.xaml</DependentUpon>
@@ -171,9 +191,17 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\EVStageReaderView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\EVPathReaderView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ExcelStageReaderView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ExcelPathReaderView.xaml">
       <SubType>Designer</SubType>
@@ -182,6 +210,10 @@
     <Page Include="Views\BoreholeManagementView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LASStageReaderView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\LASPathReaderView.xaml">
       <SubType>Designer</SubType>

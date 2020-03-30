@@ -12,28 +12,59 @@
     <GroupBox Header="Borehole Management" BorderThickness="{StaticResource GroupBorder}">
         <Grid IsSharedSizeScope="True">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.75*"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <ListBox Grid.Row="0" ItemsSource="{Binding BoreholeModels}" DisplayMemberPath="Name" SelectionMode="Multiple" SelectedItem="{Binding SelectedBoreholeModel}"/>
+            <Button Grid.Column="1" Grid.Row="0" Content="Save" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}" Command="{Binding SaveWellCommand}"/>
+            <Button Grid.Column="2" Grid.Row="0" Content="Load" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}" Command="{Binding LoadWellCommand}"/>
 
-            <Grid Grid.Row="1" IsSharedSizeScope="True">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1.75*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+            <ListBox Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" ItemsSource="{Binding WellModels}" SelectionMode="Multiple" SelectedItem="{Binding SelectedWellModel}" HorizontalContentAlignment="Stretch">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Expander Header="{Binding Name}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1.75*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <ComboBox Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" ItemsSource="{Binding ValueTypes}"/>
+                                <Expander Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" Header="Path">
+                                    <DataGrid ItemsSource="{Binding Path}" GridLinesVisibility="All" IsReadOnly="True" ColumnWidth="*"/>
+                                </Expander>
+                                <Expander Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2" Header="Stages">
+                                    <DataGrid ItemsSource="{Binding Stages}" GridLinesVisibility="All" IsReadOnly="True" ColumnWidth="*" AutoGenerateColumns="False">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Stage" Binding="{Binding StageNumber}"/>
+                                            <DataGridTextColumn Header="X" Binding="{Binding Position.X}"/>
+                                            <DataGridTextColumn Header="Y" Binding="{Binding Position.Y}"/>
+                                            <DataGridTextColumn Header="Z" Binding="{Binding Position.Z}"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </Expander>
+                                <Button Grid.Column="1" Grid.Row="3" Content="Add" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}" Command="{Binding Path=DataContext.AddStageCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" CommandParameter="{Binding ID}"/>
+                                <Button Grid.Column="2" Grid.Row="3" Content="Remove" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}" Command="{Binding Path=DataContext.RemoveStageCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" CommandParameter="{Binding ID}"/>
+                            </Grid>
+                        </Expander>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
 
-                <Button Grid.Column="1" Grid.Row="0" Content="Add" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}" Command="{Binding AddBoreholeCommand}"/>
-                <Button Grid.Column="2" Grid.Row="0" Content="Remove" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}" Command="{Binding RemoveBoreholeCommand}"/>
-            </Grid>
+            <Button Grid.Column="1" Grid.Row="2" Content="Add" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}" Command="{Binding AddWellCommand}"/>
+            <Button Grid.Column="2" Grid.Row="2" Content="Remove" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}" Command="{Binding RemoveWellCommand}"/>
 
         </Grid>
     </GroupBox>

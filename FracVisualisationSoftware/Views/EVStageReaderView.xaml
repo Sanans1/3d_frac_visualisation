@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="FracVisualisationSoftware.Views.EVPathReaderView"
+﻿<UserControl x:Class="FracVisualisationSoftware.Views.EVStageReaderView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:FracVisualisationSoftware.Views"
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
-             DataContext="{Binding EvPathReader, Source={StaticResource Locator}}"
+             DataContext="{Binding EvStageReader, Source={StaticResource Locator}}"
              mah:DialogParticipation.Register="{Binding}"
              d:DesignHeight="450" d:DesignWidth="400">
     <GroupBox Header="EV Reader" BorderThickness="{StaticResource GroupBorder}">
@@ -22,6 +22,7 @@
                 <RowDefinition Height="Auto" SharedSizeGroup="HeadingRow"/>
                 <RowDefinition Height="Auto" SharedSizeGroup="HeadingRow"/>
                 <RowDefinition Height="Auto" SharedSizeGroup="HeadingRow"/>
+                <RowDefinition Height="Auto" SharedSizeGroup="HeadingRow"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
@@ -34,16 +35,19 @@
             <TextBlock Grid.Row="2" Grid.Column="0" Text="Filter Text" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
             <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding FilterText}" Margin="{StaticResource TypicalMargin}"/>
 
-            <TextBlock Grid.Column="0" Grid.Row="3" Text="X Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
-            <ComboBox Grid.Column="1" Grid.Row="3" ItemsSource="{Binding Headings}" SelectedIndex="{Binding SelectedXHeadingIndex}" Margin="{StaticResource TypicalMargin}"/>
+            <TextBlock Grid.Column="0" Grid.Row="3" Text="Stage Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
+            <ComboBox Grid.Column="1" Grid.Row="3" ItemsSource="{Binding Headings}" SelectedIndex="{Binding SelectedStageHeadingIndex}" Margin="{StaticResource TypicalMargin}"/>
 
-            <TextBlock Grid.Column="0" Grid.Row="4" Text="Y Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
-            <ComboBox Grid.Column="1" Grid.Row="4" ItemsSource="{Binding Headings}" SelectedIndex="{Binding SelectedYHeadingIndex}" Margin="{StaticResource TypicalMargin}"/>
+            <TextBlock Grid.Column="0" Grid.Row="4" Text="X Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
+            <ComboBox Grid.Column="1" Grid.Row="4" ItemsSource="{Binding Headings}" SelectedIndex="{Binding SelectedXHeadingIndex}" Margin="{StaticResource TypicalMargin}"/>
 
-            <TextBlock Grid.Column="0" Grid.Row="5" Text="Z Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
-            <ComboBox Grid.Column="1" Grid.Row="5" ItemsSource="{Binding Headings}" SelectedIndex="{Binding SelectedZHeadingIndex}" Margin="{StaticResource TypicalMargin}"/>
+            <TextBlock Grid.Column="0" Grid.Row="5" Text="Y Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
+            <ComboBox Grid.Column="1" Grid.Row="5" ItemsSource="{Binding Headings}" SelectedIndex="{Binding SelectedYHeadingIndex}" Margin="{StaticResource TypicalMargin}"/>
 
-            <Button Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="6" Command="{Binding ReadEVFileCommand}" Content="Read" Margin="{StaticResource TypicalMargin}"/>
+            <TextBlock Grid.Column="0" Grid.Row="6" Text="Z Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
+            <ComboBox Grid.Column="1" Grid.Row="6" ItemsSource="{Binding Headings}" SelectedIndex="{Binding SelectedZHeadingIndex}" Margin="{StaticResource TypicalMargin}"/>
+
+            <Button Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="7" Command="{Binding ReadEVFileCommand}" Content="Read" Margin="{StaticResource TypicalMargin}"/>
         </Grid>
     </GroupBox>
 </UserControl>

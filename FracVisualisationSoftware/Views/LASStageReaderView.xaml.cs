@@ -18,9 +18,9 @@ namespace FracVisualisationSoftware.Views
     /// <summary>
     /// Interaction logic for LASReaderView.xaml
     /// </summary>
-    public partial class LASPathReaderView : UserControl
+    public partial class LASStageReaderView : UserControl
     {
-        public LASPathReaderView()
+        public LASStageReaderView()
         {
             InitializeComponent();
         }

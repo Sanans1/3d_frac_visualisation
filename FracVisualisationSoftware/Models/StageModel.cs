@@ -7,10 +7,10 @@ using System.Windows.Media.Media3D;
 
 namespace FracVisualisationSoftware.Models
 {
-    public class BoreholeModel
+    public class StageModel
     {
-        public int ID { get; set; }
-        public string Name { get; set; }
-        public List<Point3D> TubePath { get; set; }
+        public int StageNumber { get; set; }
+        public Point3D Position { get; set; }
+        public Dictionary<string, double> Values { get; set; }
     }
 }

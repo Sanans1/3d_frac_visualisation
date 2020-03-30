@@ -18,9 +18,9 @@ namespace FracVisualisationSoftware.Views
     /// <summary>
     /// Interaction logic for ExcelEditorView.xaml
     /// </summary>
-    public partial class ExcelEditorView : UserControl
+    public partial class ExcelPathReaderView : UserControl
     {
-        public ExcelEditorView()
+        public ExcelPathReaderView()
         {
             InitializeComponent();
         }

@@ -25,18 +25,16 @@ namespace FracVisualisationSoftware.ViewModels
 
         #region injected fields
 
-        private IDialogCoordinator _dialogCoordinator;
+        protected IDialogCoordinator _dialogCoordinator;
 
         #endregion injected fields
         
         private ExcelPackage _excelApplication;
         private ExcelWorkbook _excelWorkbook;
-        private ExcelWorksheet _excelWorksheet;
-        private ExcelRange _excelUsedRange;
+        protected ExcelWorksheet _excelWorksheet;
+        protected ExcelRange _excelUsedRange;
 
         private string _nameText;
-
-        private string _excelFileName;
 
         private readonly object _excelCollectionLock;
         private ObservableCollection<string> _excelWorksheetNames;
@@ -188,23 +186,45 @@ namespace FracVisualisationSoftware.ViewModels
             _excelCollectionLock = new object();
             ExcelWorksheetNames = new ObservableCollection<string>();
 
-            ReadExcelFileCommand = new RelayCommand(ReadExcelFileAction, CanReadExcelFileAction);
+            SetupButtonCommands();
 
-            MessengerInstance.Register<string>(this, FlyoutToggleEnum.ExcelBorehole, SelectExcelFileAction);
+            SetupMessengerInstance();
         }
 
         #endregion constructor
 
         #region commands
 
-        public ICommand SelectExcelFileCommand { get; }
-        public ICommand ReadExcelFileCommand { get; }
+        public ICommand ReadExcelFileCommand { get; protected set; }
 
         #endregion commands 
 
         #region methods
 
-        private bool? HeadingValidation(string columnHeading)
+        protected virtual void SetupButtonCommands()
+        {
+            ReadExcelFileCommand = new RelayCommand(ReadExcelFileAction, CanReadExcelFileAction);
+        }
+
+        protected virtual void SetupMessengerInstance()
+        {
+            MessengerInstance.Register<FlyoutMessageModel>(this, (FileTypeEnum.Excel, WellDataTypeEnum.Path), SelectExcelFileAction);
+        }
+
+        protected virtual void ResetProperties()
+        {
+            _excelApplication = null;
+            _excelWorkbook = null;
+            _excelWorksheet = null;
+            _excelUsedRange = null;
+            NameText = null;
+            ExcelWorksheetNames = new ObservableCollection<string>();
+            XColumnHeading = null;
+            YColumnHeading = null;
+            ZColumnHeading = null;
+        }
+
+        protected bool? HeadingValidation(string columnHeading)
         {
             if (_excelUsedRange == null) return null;
 
@@ -229,27 +249,13 @@ namespace FracVisualisationSoftware.ViewModels
             return true;
         }
 
-        private void ResetProperties()
-        {
-            _excelApplication = null;
-            _excelWorkbook = null;
-            _excelWorksheet = null;
-            _excelUsedRange = null;
-            NameText = null;
-            _excelFileName = null;
-            ExcelWorksheetNames = new ObservableCollection<string>();
-            XColumnHeading = null;
-            YColumnHeading = null;
-            ZColumnHeading = null;
-        }
-
         #region command methods
 
         /// <summary>
         /// Opens a OpenFileDialog to allow the user to select an Excel file.
         /// This also populates the Worksheet dropdown with names of Worksheets.
         /// </summary>
-        private async void SelectExcelFileAction(string filePath)
+        protected virtual async void SelectExcelFileAction(FlyoutMessageModel flyoutMessage)
         {
             ProgressDialogController progressDialogController = await _dialogCoordinator.ShowProgressAsync(this, "Please wait...", "Awaiting user to select file...");
             progressDialogController.Maximum = 100;
@@ -259,9 +265,7 @@ namespace FracVisualisationSoftware.ViewModels
                 progressDialogController.SetProgress(25);
                 progressDialogController.SetMessage("Starting Excel process...");
 
-                _excelFileName = filePath.Substring(filePath.LastIndexOf('\\') + 1);
-
-                _excelApplication = new ExcelPackage(new FileInfo(filePath));
+                _excelApplication = new ExcelPackage(new FileInfo(flyoutMessage.FileName));
 
                 progressDialogController.SetProgress(50);
                 progressDialogController.SetMessage("Opening Excel Workbook...");
@@ -286,31 +290,30 @@ namespace FracVisualisationSoftware.ViewModels
         {
             if (XColumnFound != null && YColumnFound != null && ZColumnFound != null)
             {
-                return (!string.IsNullOrWhiteSpace(_excelFileName) && XColumnFound.Value && YColumnFound.Value &&
-                        ZColumnFound.Value);
+                return (XColumnFound.Value && YColumnFound.Value && ZColumnFound.Value);
             }
 
             return false;
         }
 
-        private async void ReadExcelFileAction()
+        protected virtual async void ReadExcelFileAction()
         {
             ProgressDialogController progressDialogController = await _dialogCoordinator.ShowProgressAsync(this, "Please wait...", "Finding headings...");
             progressDialogController.Maximum = 100;
 
             await Task.Run(() =>
             {
-                IEnumerable<ExcelRangeBase> xColumn = _excelUsedRange.Single(cell => cell.Address == _xColumnHeading);
+                IEnumerable<ExcelRangeBase> xColumn = _excelUsedRange.Single(cell => cell.Address == XColumnHeading);
 
                 progressDialogController.SetProgress(33);
 
-                IEnumerable<ExcelRangeBase> yColumn = _excelUsedRange.Single(cell => cell.Address == _yColumnHeading);
+                IEnumerable<ExcelRangeBase> yColumn = _excelUsedRange.Single(cell => cell.Address == YColumnHeading);
 
                 progressDialogController.SetProgress(66);
 
-                IEnumerable<ExcelRangeBase> zColumn = _excelUsedRange.Single(cell => cell.Address == _zColumnHeading);
+                IEnumerable<ExcelRangeBase> zColumn = _excelUsedRange.Single(cell => cell.Address == ZColumnHeading);
 
-                IEnumerable<ExcelRangeBase> filterColumn = _excelUsedRange.Single(cell => cell.Address == _filterColumnHeading);
+                IEnumerable<ExcelRangeBase> filterColumn = _excelUsedRange.SingleOrDefault(cell => cell.Address == FilterColumnHeading);
 
                 progressDialogController.SetMessage("Headings found...");
                 progressDialogController.SetProgress(100);
@@ -377,14 +380,14 @@ namespace FracVisualisationSoftware.ViewModels
                     progressDialogController.SetProgress(currentRow - 1);
                 }
 
-                BoreholeModel boreholeModel = new BoreholeModel
+                WellModel wellModel = new WellModel
                 {
                     ID = 0,
                     Name = NameText,
-                    TubePath = tubePath
+                    Path = tubePath
                 };
 
-                MessengerInstance.Send(boreholeModel, "Borehole Data Added");
+                MessengerInstance.Send(wellModel, "Borehole Data Added");
             });
 
             await progressDialogController.CloseAsync();

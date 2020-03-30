@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Input;
 using FracVisualisationSoftware.Enums;
 using FracVisualisationSoftware.Models;
+using FracVisualisationSoftware.Services.Interfaces.Data;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using MahApps.Metro.Controls.Dialogs;
@@ -25,56 +26,91 @@ namespace FracVisualisationSoftware.ViewModels
         #region injected fields
 
         private IDialogCoordinator _dialogCoordinator;
+        private IDataService _dataService;
 
         #endregion
 
-        private ObservableCollection<BoreholeModel> _boreholeModels;
-        private BoreholeModel _selectedBoreholeModel;
+        private ObservableCollection<WellModel> _wellModels;
+        private WellModel _selectedWellModel;
 
         #endregion
 
         #region properties
 
-        public ObservableCollection<BoreholeModel> BoreholeModels
+        public ObservableCollection<WellModel> WellModels
         {
-            get { return _boreholeModels; }
-            set { _boreholeModels = value; RaisePropertyChanged(); }
+            get { return _wellModels; }
+            set { _wellModels = value; RaisePropertyChanged(); }
         }
 
-        public BoreholeModel SelectedBoreholeModel
+        public WellModel SelectedWellModel
         {
-            get { return _selectedBoreholeModel; }
-            set { _selectedBoreholeModel = value; RaisePropertyChanged(); }
+            get { return _selectedWellModel; }
+            set { _selectedWellModel = value; RaisePropertyChanged(); }
         }
 
         #endregion
 
         #region constructor
 
-        public BoreholeManagementViewModel(IDialogCoordinator dialogCoordinator)
+        public BoreholeManagementViewModel(IDialogCoordinator dialogCoordinator, IDataService dataService)
         {
             _dialogCoordinator = dialogCoordinator;
+            _dataService = dataService;
 
-            BoreholeModels = new ObservableCollection<BoreholeModel>();
+            WellModels = new ObservableCollection<WellModel>();
 
-            AddBoreholeCommand = new RelayCommand(AddBoreholeAction);
-            RemoveBoreholeCommand = new RelayCommand(RemoveBoreholeAction);
+            SaveWellCommand = new RelayCommand(SaveWellAction);
+            LoadWellCommand = new RelayCommand(LoadWellAction);
+            AddWellCommand = new RelayCommand(() => AddAction(WellDataTypeEnum.Path));
+            RemoveWellCommand = new RelayCommand(RemoveAction); //TODO Add lambda thing to
+            AddStageCommand = new RelayCommand<int>(i => AddAction(WellDataTypeEnum.Stages, i));
+            RemoveStageCommand = new RelayCommand(RemoveAction); //TODO Add lambda thing to
 
-            MessengerInstance.Register<BoreholeModel>(this, "Borehole Data Added", AddBoreholeToList);
+            MessengerInstance.Register<WellModel>(this, "Borehole Data Added", AddWellToList);
+            MessengerInstance.Register<(List<StageModel>, int)>(this, "Well Stages Added", x => AddStagesToWell(x.Item1, x.Item2));
         }
 
         #endregion
 
         #region commands
 
-        public ICommand AddBoreholeCommand { get; }
-        public ICommand RemoveBoreholeCommand { get; }
+        public ICommand SaveWellCommand { get; }
+        public ICommand LoadWellCommand { get; }
+        public ICommand AddWellCommand { get; }
+        public ICommand RemoveWellCommand { get; }
+        public ICommand AddStageCommand { get; }
+        public ICommand RemoveStageCommand { get; }
 
         #endregion
 
         #region methods
 
-        private async void AddBoreholeAction()
+        private void SaveWellAction()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Text Files|*.txt";
+            saveFileDialog.Title = "Select a file to save well data to.";
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                _dataService.SaveWellData(WellModels.ToList(), saveFileDialog.FileName);
+            }
+        }        
+        
+        private void LoadWellAction()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text Files|*.txt";
+            openFileDialog.Title = "Select a file to load well data from.";
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                WellModels = new ObservableCollection<WellModel>(_dataService.LoadWellData(openFileDialog.FileName));_dataService.LoadWellData(openFileDialog.FileName);
+            }
+        }
+
+        private async void AddAction(WellDataTypeEnum dataTypeEnum, int wellID = -1)
         {
             ProgressDialogController progressDialogController = await _dialogCoordinator.ShowProgressAsync(this, "Please wait...", "Awaiting user to select file...");
             progressDialogController.Maximum = 100;
@@ -89,25 +125,28 @@ namespace FracVisualisationSoftware.ViewModels
                 {
                     string extension = Path.GetExtension(openFileDialog.FileName);
 
+                    FlyoutMessageModel flyoutMessage = new FlyoutMessageModel
+                        {FileName = openFileDialog.FileName, WellID = wellID};
+
                     switch (extension)
                     {
                         case ".xls":
                         case ".xlsx":
                         case ".xlsm":
-                            MessengerInstance.Send(openFileDialog.FileName, FlyoutToggleEnum.ExcelBorehole);
-                            MessengerInstance.Send(FlyoutToggleEnum.ExcelBorehole);
+                            MessengerInstance.Send(flyoutMessage, (FileTypeEnum.Excel, dataTypeEnum));
+                            MessengerInstance.Send((FileTypeEnum.Excel, dataTypeEnum));
                             break;
                         case ".las":
-                            MessengerInstance.Send(openFileDialog.FileName, FlyoutToggleEnum.LASBorehole);
-                            MessengerInstance.Send(FlyoutToggleEnum.LASBorehole);
+                            MessengerInstance.Send(flyoutMessage, (FileTypeEnum.LAS, dataTypeEnum));
+                            MessengerInstance.Send((FileTypeEnum.LAS, dataTypeEnum));
                             break;
                         case ".dat":
                         case ".path":
                         case ".pdat":
                         case ".prod":
                         case ".tops":
-                            MessengerInstance.Send(openFileDialog.FileName, FlyoutToggleEnum.EVBorehole);
-                            MessengerInstance.Send(FlyoutToggleEnum.EVBorehole);
+                            MessengerInstance.Send(flyoutMessage, (FileTypeEnum.EV, dataTypeEnum));
+                            MessengerInstance.Send((FileTypeEnum.EV, dataTypeEnum));
                             break;
                     }
                 }
@@ -116,15 +155,22 @@ namespace FracVisualisationSoftware.ViewModels
             });
         }
 
-        private async void RemoveBoreholeAction()
+        private async void RemoveAction()
         {
-            MessengerInstance.Send(SelectedBoreholeModel, "Delete BoreholeModel");
-            BoreholeModels.Remove(SelectedBoreholeModel);
+            MessengerInstance.Send(SelectedWellModel, "Delete BoreholeModel");
+            WellModels.Remove(SelectedWellModel);
         }
 
-        private void AddBoreholeToList(BoreholeModel boreholeModel)
+        private void AddWellToList(WellModel wellModel)
         {
-            Application.Current.Dispatcher?.InvokeAsync(() => { BoreholeModels.Add(boreholeModel); });
+            wellModel.ID = WellModels.Count;
+
+            Application.Current.Dispatcher?.InvokeAsync(() => { WellModels.Add(wellModel); });
+        }
+
+        private void AddStagesToWell(List<StageModel> stageModels, int wellID)
+        {
+            WellModels[wellID].Stages = new ObservableCollection<StageModel>(stageModels);
         }
 
         #endregion

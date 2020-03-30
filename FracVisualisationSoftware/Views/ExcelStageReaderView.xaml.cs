@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace FracVisualisationSoftware.Views
 {
     /// <summary>
-    /// Interaction logic for LASReaderView.xaml
+    /// Interaction logic for ExcelEditorView.xaml
     /// </summary>
-    public partial class LASPathReaderView : UserControl
+    public partial class ExcelStageReaderView : UserControl
     {
-        public LASPathReaderView()
+        public ExcelStageReaderView()
         {
             InitializeComponent();
         }

@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace FracVisualisationSoftware.Enums
 {
-    public enum VisualMode
+    public enum FileTypeEnum
     {
-        Column,
-        Sphere
+        Excel,
+        LAS,
+        EV,
+        None
     }
 }

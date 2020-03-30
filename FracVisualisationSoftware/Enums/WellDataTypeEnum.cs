@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace FracVisualisationSoftware.Enums
 {
-    public enum FlyoutToggleEnum
+    public enum WellDataTypeEnum
     {
-        ExcelBorehole,
-        LASBorehole,
-        EVBorehole,
-        Close
+        Path,
+        Stages,
+        Data,
+        None
     }
 }

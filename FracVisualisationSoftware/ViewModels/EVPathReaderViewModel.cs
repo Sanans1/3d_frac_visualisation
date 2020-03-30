@@ -23,15 +23,13 @@ namespace FracVisualisationSoftware.ViewModels
 
         #region injected fields
 
-        private IDialogCoordinator _dialogCoordinator;
+        protected IDialogCoordinator _dialogCoordinator;
 
         #endregion injected fields
 
         private string _nameText;
 
-        private string _evFileName;
-
-        private List<string> _content;
+        protected List<string> _content;
 
         private readonly object _headingCollectionLock;
         private ObservableCollection<string> _headings;
@@ -109,22 +107,32 @@ namespace FracVisualisationSoftware.ViewModels
 
             _content = new List<string>();
 
-            ReadEVFileCommand = new RelayCommand(ReadEVFileAction, CanReadEVFileAction);
+            SetupButtonCommands();
 
-            MessengerInstance.Register<string>(this, FlyoutToggleEnum.EVBorehole, SelectEVFileAction);
+            SetupMessengerInstance();
         }
 
         #endregion constructor
 
         #region commands
 
-        public ICommand ReadEVFileCommand { get; }
+        public ICommand ReadEVFileCommand { get; protected set; }
 
         #endregion commands 
 
         #region methods
 
-        private void ResetProperties()
+        protected virtual void SetupButtonCommands()
+        {
+            ReadEVFileCommand = new RelayCommand(ReadEVFileAction, CanReadEVFileAction);
+        }
+
+        protected virtual void SetupMessengerInstance()
+        {
+            MessengerInstance.Register<FlyoutMessageModel>(this, (FileTypeEnum.EV, WellDataTypeEnum.Path), SelectEVFileAction);
+        }
+
+        protected void ResetProperties()
         {
             NameText = null;
             Headings = new ObservableCollection<string>();
@@ -136,7 +144,7 @@ namespace FracVisualisationSoftware.ViewModels
         /// Opens a OpenFileDialog to allow the user to select an Excel file.
         /// This also populates the Worksheet dropdown with names of Worksheets.
         /// </summary>
-        private async void SelectEVFileAction(string filePath)
+        protected async void SelectEVFileAction(FlyoutMessageModel flyoutMessage)
         {
             ProgressDialogController progressDialogController = await _dialogCoordinator.ShowProgressAsync(this, "Please wait...", "Awaiting user to select file...");
             progressDialogController.Maximum = 100;
@@ -149,7 +157,7 @@ namespace FracVisualisationSoftware.ViewModels
                 progressDialogController.SetProgress(66);
                 progressDialogController.SetMessage("Reading Fields...");
 
-                using (StreamReader reader = new StreamReader(filePath))
+                using (StreamReader reader = new StreamReader(flyoutMessage.FileName))
                 {
                     while (!reader.EndOfStream)
                     {
@@ -189,7 +197,7 @@ namespace FracVisualisationSoftware.ViewModels
             return false;
         }
 
-        private async void ReadEVFileAction()
+        protected virtual async void ReadEVFileAction()
         {
             ProgressDialogController progressDialogController = await _dialogCoordinator.ShowProgressAsync(this, "Please wait...", "Finding headings...");
             progressDialogController.Maximum = 100;
@@ -218,7 +226,7 @@ namespace FracVisualisationSoftware.ViewModels
                 {
                     string[] splitLine = line.Split("\t".ToCharArray());
 
-                    if (splitLine[_selectedFilterColumnIndex].Contains(_filterText))
+                    if (splitLine[SelectedFilterColumnIndex].Contains(FilterText))
                     {
                         if (!initalValuesSet)
                         {
@@ -246,14 +254,14 @@ namespace FracVisualisationSoftware.ViewModels
                     progressDialogController.SetProgress(currentRow - 1);
                 }
 
-                BoreholeModel boreholeModel = new BoreholeModel
+                WellModel wellModel = new WellModel
                 {
                     ID = 0,
                     Name = NameText,
-                    TubePath = tubePath
+                    Path = tubePath
                 };
 
-                MessengerInstance.Send(boreholeModel, "Borehole Data Added");
+                MessengerInstance.Send(wellModel, "Borehole Data Added");
             });
 
             await progressDialogController.CloseAsync();

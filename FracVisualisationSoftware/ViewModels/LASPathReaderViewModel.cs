@@ -27,7 +27,7 @@ namespace FracVisualisationSoftware.ViewModels
 
         #region injected fields
 
-        private IDialogCoordinator _dialogCoordinator;
+        protected IDialogCoordinator _dialogCoordinator;
 
         #endregion injected fields
         
@@ -47,7 +47,7 @@ namespace FracVisualisationSoftware.ViewModels
         private int _selectedYHeadingIndex;
         private int _selectedZHeadingIndex;
 
-        private string _filterText;
+        protected string _filterText;
 
         #endregion fields
 
@@ -155,22 +155,32 @@ namespace FracVisualisationSoftware.ViewModels
             _headingCollectionLock = new object();
             Headings = new ObservableCollection<LASInformationModel>();
 
-            ReadLASFileCommand = new RelayCommand(ReadLASFileAction, CanReadLASFileAction);
+            SetupButtonCommands();
 
-            MessengerInstance.Register<string>(this, FlyoutToggleEnum.LASBorehole, SelectLASFileAction);
+            SetupMessengerInstance();
         }
 
         #endregion constructor
 
         #region commands
 
-        public ICommand ReadLASFileCommand { get; }
+        public ICommand ReadLASFileCommand { get; protected set; }
 
         #endregion commands 
 
         #region methods
 
-        private void ResetProperties()
+        protected virtual void SetupButtonCommands()
+        {
+            ReadLASFileCommand = new RelayCommand(ReadLASFileAction, CanReadLASFileAction);
+        }
+
+        protected virtual void SetupMessengerInstance()
+        {
+            MessengerInstance.Register<FlyoutMessageModel>(this, (FileTypeEnum.EV, WellDataTypeEnum.Path), SelectLASFileAction);
+        }
+
+        protected void ResetProperties()
         {
             NameText = null;
             Sections = new ObservableCollection<LASSectionModel>();
@@ -209,7 +219,7 @@ namespace FracVisualisationSoftware.ViewModels
         /// Opens a OpenFileDialog to allow the user to select an Excel file.
         /// This also populates the Worksheet dropdown with names of Worksheets.
         /// </summary>
-        private async void SelectLASFileAction(string filePath)
+        protected virtual async void SelectLASFileAction(FlyoutMessageModel flyoutMessage)
         {
             ProgressDialogController progressDialogController = await _dialogCoordinator.ShowProgressAsync(this, "Please wait...", "Awaiting user to select file...");
             progressDialogController.Maximum = 100;
@@ -222,7 +232,7 @@ namespace FracVisualisationSoftware.ViewModels
                 progressDialogController.SetProgress(66);
                 progressDialogController.SetMessage("Reading Sections...");
 
-                using (StreamReader reader = new StreamReader(filePath))
+                using (StreamReader reader = new StreamReader(flyoutMessage.FileName))
                 {
                     string line = reader.ReadLine();
 
@@ -270,7 +280,7 @@ namespace FracVisualisationSoftware.ViewModels
             return false;
         }
 
-        private async void ReadLASFileAction()
+        protected virtual async void ReadLASFileAction()
         {
             ProgressDialogController progressDialogController = await _dialogCoordinator.ShowProgressAsync(this, "Please wait...", "Finding headings...");
             progressDialogController.Maximum = 100;
@@ -331,14 +341,14 @@ namespace FracVisualisationSoftware.ViewModels
                     progressDialogController.SetProgress(currentRow - 1);
                 }
 
-                BoreholeModel boreholeModel = new BoreholeModel
+                WellModel wellModel = new WellModel
                 {
                     ID = 0,
                     Name = NameText,
-                    TubePath = tubePath
+                    Path = tubePath
                 };
 
-                MessengerInstance.Send(boreholeModel, "Borehole Data Added");
+                MessengerInstance.Send(wellModel, "Borehole Data Added");
             });
 
             await progressDialogController.CloseAsync();

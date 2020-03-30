@@ -18,9 +18,9 @@ namespace FracVisualisationSoftware.Views
     /// <summary>
     /// Interaction logic for EVReaderView.xaml
     /// </summary>
-    public partial class EVReaderView : UserControl
+    public partial class EVPathReaderView : UserControl
     {
-        public EVReaderView()
+        public EVPathReaderView()
         {
             InitializeComponent();
         }
