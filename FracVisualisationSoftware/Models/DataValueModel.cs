@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace FracVisualisationSoftware.Models
 {
-    public class LASSectionModel
+    public class DataValueModel
     {
-        public string Name { get; set; }
-        public List<string> Content { get; set; }
+        public int Stage { get; set; }
+        public double Value { get; set; }
+        public DateTime Timestamp { get; set; }
     }
 }

@@ -14,12 +14,15 @@
              DataContext="{Binding Viewport, Source={StaticResource Locator}}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <h:HelixViewport3D ShowViewCube="False" ItemsSource="{Binding ViewportObjects}">
-            <!--<i:Interaction.Triggers>
+        <h:HelixViewport3D x:Name="Viewport" ShowViewCube="False" ItemsSource="{Binding ViewportObjects}" ShowCoordinateSystem="True" >
+            <h:HelixViewport3D.Camera>
+                <PerspectiveCamera Position="{Binding CameraPosition}"/>
+            </h:HelixViewport3D.Camera>
+            <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Loaded">
                     <i:InvokeCommandAction Command="{Binding HelixViewport3DLoadedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type h:HelixViewport3D}}}"/>
                 </i:EventTrigger>
-            </i:Interaction.Triggers>-->
+            </i:Interaction.Triggers>
         </h:HelixViewport3D>
     </Grid>
 </UserControl>

@@ -7,16 +7,25 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
-using FracVisualisationSoftware.Annotations;
 
 namespace FracVisualisationSoftware.Models
 {
-    public class WellModel : INotifyPropertyChanged
+    public class WellModel : ModelBase
     {
+        private ObservableCollection<Point3D> _path;
         private ObservableCollection<StageModel> _stages;
+        private ObservableCollection<DataSetModel> _dataSets = new ObservableCollection<DataSetModel>();
+        private int _selectedDataSetIndex;
+
         public int ID { get; set; }
         public string Name { get; set; }
-        public List<Point3D> Path { get; set; }
+
+
+        public ObservableCollection<Point3D> Path
+        {
+            get => _path;
+            set { _path = value; RaisePropertyChanged(); }
+        }
 
         public ObservableCollection<StageModel> Stages
         {
@@ -24,14 +33,16 @@ namespace FracVisualisationSoftware.Models
             set { _stages = value; RaisePropertyChanged();}
         }
 
-        public List<string> ValueTypes { get; set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void RaisePropertyChanged([CallerMemberName] string propertyName = null)
+        public ObservableCollection<DataSetModel> DataSets
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            get => _dataSets;
+            set { _dataSets = value; RaisePropertyChanged(); }
+        }
+
+        public int SelectedDataSetIndex
+        {
+            get => _selectedDataSetIndex;
+            set { _selectedDataSetIndex = value; RaisePropertyChanged(); }
         }
     }
 }

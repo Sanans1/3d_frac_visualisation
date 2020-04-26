@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace FracVisualisationSoftware.Views
 {
     /// <summary>
-    /// Interaction logic for FileImportView.xaml
+    /// Interaction logic for TimelineView.xaml
     /// </summary>
-    public partial class WellManagementView : UserControl
+    public partial class TimelineView : UserControl
     {
-        public WellManagementView()
+        public TimelineView()
         {
             InitializeComponent();
         }

@@ -1,8 +1,13 @@
+using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using CommonServiceLocator;
 using FracVisualisationSoftware.Services.Implementations.Data;
 using FracVisualisationSoftware.Services.Interfaces.Data;
 using FracVisualisationSoftware.ViewModels;
+using FracVisualisationSoftware.ViewModels.Readers.EV;
+using FracVisualisationSoftware.ViewModels.Readers.Excel;
+using FracVisualisationSoftware.ViewModels.Readers.LAS;
+using FracVisualisationSoftware.Views;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using MahApps.Metro.Controls.Dialogs;
@@ -30,12 +35,16 @@ namespace FracVisualisationSoftware
             SimpleIoc.Default.Register<ViewportViewModel>();
             SimpleIoc.Default.Register<ExcelPathReaderViewModel>();
             SimpleIoc.Default.Register<ExcelStageReaderViewModel>();
+            SimpleIoc.Default.Register<ExcelDataReaderViewModel>();
             SimpleIoc.Default.Register<LASPathReaderViewModel>();
             SimpleIoc.Default.Register<LASStageReaderViewModel>();
+            SimpleIoc.Default.Register<LASDataReaderViewModel>();
             SimpleIoc.Default.Register<EVPathReaderViewModel>();
             SimpleIoc.Default.Register<EVStageReaderViewModel>();
-            SimpleIoc.Default.Register<BoreholeManagementViewModel>();
+            SimpleIoc.Default.Register<EVDataReaderViewModel>();
+            SimpleIoc.Default.Register<WellManagementViewModel>();
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<TimelineViewModel>();
         }
 
         public ViewportViewModel Viewport
@@ -51,6 +60,11 @@ namespace FracVisualisationSoftware
         public ExcelStageReaderViewModel ExcelStageReader
         {
             get { return ServiceLocator.Current.GetInstance<ExcelStageReaderViewModel>(); }
+        }        
+        
+        public ExcelDataReaderViewModel ExcelDataReader
+        {
+            get { return ServiceLocator.Current.GetInstance<ExcelDataReaderViewModel>(); }
         }
 
         public LASPathReaderViewModel LasPathReader
@@ -61,6 +75,11 @@ namespace FracVisualisationSoftware
         public LASStageReaderViewModel LasStageReader
         {
             get { return ServiceLocator.Current.GetInstance<LASStageReaderViewModel>(); }
+        }        
+        
+        public LASDataReaderViewModel LasDataReader
+        {
+            get { return ServiceLocator.Current.GetInstance<LASDataReaderViewModel>(); }
         }
 
         public EVPathReaderViewModel EvPathReader
@@ -71,11 +90,21 @@ namespace FracVisualisationSoftware
         public EVStageReaderViewModel EvStageReader
         {
             get { return ServiceLocator.Current.GetInstance<EVStageReaderViewModel>(); }
+        }        
+        
+        public EVDataReaderViewModel EvDataReader
+        {
+            get { return ServiceLocator.Current.GetInstance<EVDataReaderViewModel>(); }
         }
 
-        public BoreholeManagementViewModel BoreholeManagement
+        public WellManagementViewModel WellManagement
         {
-            get { return ServiceLocator.Current.GetInstance<BoreholeManagementViewModel>(); }
+            get { return ServiceLocator.Current.GetInstance<WellManagementViewModel>(); }
+        }
+
+        public TimelineViewModel Timeline
+        {
+            get { return ServiceLocator.Current.GetInstance<TimelineViewModel>(); }
         }
 
         public MainViewModel Main

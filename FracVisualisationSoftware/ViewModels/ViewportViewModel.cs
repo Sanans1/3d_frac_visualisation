@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using System.Windows.Threading;
 using FracVisualisationSoftware.Enums;
@@ -28,22 +29,16 @@ namespace FracVisualisationSoftware.ViewModels
 
         #endregion injected fields
 
-        private Point3DCollection _tubePath;
-
-        private double _tubeLength;
         private double _tubeDiameter;
-        private HelixViewport3D _camera;
         private ObservableCollection<Visual3D> _viewportObjects;
+
+        private Point3D _cameraPosition;
+
+        private HelixViewport3D _viewport;
 
         #endregion fields
 
         #region properties
-
-        public double TubeLength
-        {
-            get => _tubeLength;
-            set { _tubeLength = value; RaisePropertyChanged(); }
-        }
 
         public double TubeDiameter
         {
@@ -54,13 +49,19 @@ namespace FracVisualisationSoftware.ViewModels
         public ObservableCollection<Visual3D> ViewportObjects
         {
             get => _viewportObjects;
-            set => _viewportObjects = value;
+            set { _viewportObjects = value; RaisePropertyChanged(); }
         }
 
-        public HelixViewport3D Camera
+        public Point3D CameraPosition
         {
-            get => _camera;
-            set { _camera = value; RaisePropertyChanged(); }
+            get => _cameraPosition;
+            set { _cameraPosition = value; RaisePropertyChanged(); }
+        }
+
+        public HelixViewport3D Viewport
+        {
+            get => _viewport;
+            set { _viewport = value; RaisePropertyChanged(); }
         }
 
         #endregion properties
@@ -76,14 +77,14 @@ namespace FracVisualisationSoftware.ViewModels
 
             ViewportObjects = new ObservableCollection<Visual3D>();
 
-            _tubePath = new Point3DCollection();
+            TubeDiameter = 50;
 
-            TubeDiameter = 5;
+            HelixViewport3DLoadedCommand = new RelayCommand<HelixViewport3D>(HelixViewport3DLoadedAction);
 
-            HelixViewport3DLoadedCommand = new RelayCommand<HelixViewport3D>(HelixViewport3DLoadedAction); //TODO Get reference to the ViewPort so we can manipulate the camera
-
-            MessengerInstance.Register<WellModel>(this, "Borehole Data Added",AddBoreholeMessageCallback);
-            MessengerInstance.Register<WellModel>(this, "Delete BoreholeModel", DeleteBoreholeMessageCallback);
+            MessengerInstance.Register<WellModel>(this, MessageTokenStrings.AddPathToViewport, AddPathMessageCallback);
+            MessengerInstance.Register<WellModel>(this, MessageTokenStrings.RemoveWellFromViewport, DeletePathMessageCallback);
+            MessengerInstance.Register<List<RenderDataModel>>(this, MessageTokenStrings.AddDataToViewport, AddDataMessageCallback);
+            MessengerInstance.Register<NotificationMessage>(this, "Get Viewport", GetViewportCallback);
         }
 
         #endregion constructor
@@ -96,46 +97,129 @@ namespace FracVisualisationSoftware.ViewModels
 
         #region methods
 
-        #region command methods
-
         private void HelixViewport3DLoadedAction(HelixViewport3D viewPort)
         {
-            //Camera.
+            Viewport = viewPort;
         }
 
-        #endregion command methods
+        private Point3D InvertPoint3D(Point3D point3D)
+        {
+            return point3D.Multiply(-1);
+        }
 
         #region event methods
 
-        private async void AddBoreholeMessageCallback(WellModel wellModel)
+        private void AddPathMessageCallback(WellModel wellModel)
         {
             if (wellModel == null || !wellModel.Path.Any())
                 return;
 
-            _tubePath.Dispatcher?.Invoke(() =>
-            {
-                _tubePath = new Point3DCollection(wellModel.Path);
-            });
-
             Application.Current.Dispatcher?.InvokeAsync(() =>
             {
-                ViewportObjects.Clear();
+                //Reset the lighting
+                ViewportObjects.Remove(ViewportObjects.SingleOrDefault(sunLight => sunLight.GetName() == "Light"));
 
-                ViewportObjects.Add(new SunLight());
+                SunLight light = new SunLight();
 
-                TubeVisual3D tube = new TubeVisual3D {AddCaps = true, Path = _tubePath, Diameter = TubeDiameter};
+                light.SetName("Light");
+
+                ViewportObjects.Add(light);
+
+                //Add the new path
+                Point3DCollection invertedPath = new Point3DCollection();
+
+                foreach (Point3D point3D in wellModel.Path)
+                {
+                    invertedPath.Add(InvertPoint3D(point3D));
+                }
+
+                TubeVisual3D tube = new TubeVisual3D {AddCaps = true, Path = invertedPath, Diameter = TubeDiameter};
 
                 tube.SetName(wellModel.Name);
 
                 ViewportObjects.Add(tube);
             });
 
-            MessengerInstance.Send(new NotificationMessage("Close Flyout"), "Close Flyout");
+            CameraPosition = wellModel.Path.First();
+
+            MessengerInstance.Send((FileTypeEnum.None, WellDataTypeEnum.None));
         }
 
-        private async void DeleteBoreholeMessageCallback(WellModel wellModel)
+        private void DeletePathMessageCallback(WellModel wellModel)
         {
-            ViewportObjects.Remove(ViewportObjects.Single(visual3D => visual3D.GetName() == wellModel.Name));
+            //Remove a path
+            ViewportObjects.Remove(ViewportObjects.SingleOrDefault(visual3D => visual3D.GetName().Contains(wellModel.Name)));
+        }
+
+        private void AddDataMessageCallback(List<RenderDataModel> renderDataModels)
+        {
+            Application.Current.Dispatcher?.InvokeAsync(() =>
+            {
+                //Reset the lighting
+                ViewportObjects.Remove(ViewportObjects.SingleOrDefault(sunLight => sunLight.GetName() == "Light"));
+
+                SunLight light = new SunLight();
+
+                light.SetName("Light");
+
+                ViewportObjects.Add(light);
+
+                //Add each data point
+                foreach (RenderDataModel renderDataModel in renderDataModels)
+                {
+                    Point3DCollection point3DCollection = new Point3DCollection();
+
+                    //
+                    Point3D invertedPoint3D = InvertPoint3D(renderDataModel.Position);
+
+                    point3DCollection.Add(invertedPoint3D);
+
+                    Point3D valuePoint3D = invertedPoint3D;
+
+                    valuePoint3D.Z += (renderDataModel.Value * 100);
+
+                    point3DCollection.Add(valuePoint3D);
+
+                    TubeVisual3D tube = new TubeVisual3D { AddCaps = true, Path = point3DCollection, Diameter = TubeDiameter };
+
+                    tube.SetName($"{renderDataModel.Name}-model");
+
+                    ViewportObjects.Remove(ViewportObjects.SingleOrDefault(visual3D => visual3D.GetName().Contains($"{renderDataModel.Name}-model")));
+
+                    ViewportObjects.Add(tube);
+
+                    //
+                    Point3D stageTextPoint3D = invertedPoint3D;
+
+                    stageTextPoint3D.Z -= 100;
+
+                    BillboardTextVisual3D stageText = new BillboardTextVisual3D { Position = stageTextPoint3D, Text = $"{renderDataModel.Name}", Background = Brushes.White, Padding = new Thickness(5) };
+
+                    stageText.SetName($"{renderDataModel.Name}-stage");
+
+                    ViewportObjects.Remove(ViewportObjects.SingleOrDefault(visual3D => visual3D.GetName().Contains($"{renderDataModel.Name}-stage")));
+
+                    ViewportObjects.Add(stageText);
+
+                    //
+                    Point3D valueTextPoint3D = valuePoint3D;
+
+                    valueTextPoint3D.Z += 100;
+
+                    BillboardTextVisual3D valueText = new BillboardTextVisual3D { Position = valueTextPoint3D, Text = $"{renderDataModel.Value} {renderDataModel.UnitOfMeasurement}", Background = Brushes.White, Padding = new Thickness(5)};
+
+                    valueText.SetName($"{renderDataModel.Name}-value");
+
+                    ViewportObjects.Remove(ViewportObjects.SingleOrDefault(visual3D => visual3D.GetName().Contains($"{renderDataModel.Name}-value")));
+
+                    ViewportObjects.Add(valueText);
+                }
+            });
+        }
+
+        private void GetViewportCallback(NotificationMessage _)
+        {
+            MessengerInstance.Send(Viewport, "Send Viewport");
         }
 
         #endregion event methods

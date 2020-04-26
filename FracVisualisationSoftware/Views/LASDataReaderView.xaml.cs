@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace FracVisualisationSoftware.Views
 {
     /// <summary>
-    /// Interaction logic for FileImportView.xaml
+    /// Interaction logic for LASReaderView.xaml
     /// </summary>
-    public partial class WellManagementView : UserControl
+    public partial class LASDataReaderView : UserControl
     {
-        public WellManagementView()
+        public LASDataReaderView()
         {
             InitializeComponent();
         }

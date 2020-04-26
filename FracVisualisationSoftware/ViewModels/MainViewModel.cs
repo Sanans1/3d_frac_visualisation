@@ -7,6 +7,7 @@ using System.Windows.Input;
 using FracVisualisationSoftware.Enums;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace FracVisualisationSoftware.ViewModels
 {
@@ -16,10 +17,13 @@ namespace FracVisualisationSoftware.ViewModels
 
         private bool _isExcelPathReaderFlyoutOpen;
         private bool _isExcelStageReaderFlyoutOpen;
+        private bool _isExcelDataReaderFlyoutOpen;
         private bool _isLASPathReaderFlyoutOpen;
         private bool _isLASStageReaderFlyoutOpen;
+        private bool _isLASDataReaderFlyoutOpen;
         private bool _isEVPathReaderFlyoutOpen;
         private bool _isEVStageReaderFlyoutOpen;
+        private bool _isEVDataReaderFlyoutOpen;
 
         #endregion
 
@@ -35,6 +39,12 @@ namespace FracVisualisationSoftware.ViewModels
         {
             get => _isExcelStageReaderFlyoutOpen;
             set { _isExcelStageReaderFlyoutOpen = value; RaisePropertyChanged(); }
+        }        
+        
+        public bool IsExcelDataReaderFlyoutOpen
+        {
+            get => _isExcelDataReaderFlyoutOpen;
+            set { _isExcelDataReaderFlyoutOpen = value; RaisePropertyChanged(); }
         }
 
         public bool IsLASPathReaderFlyoutOpen
@@ -47,6 +57,12 @@ namespace FracVisualisationSoftware.ViewModels
         {
             get => _isLASStageReaderFlyoutOpen;
             set { _isLASStageReaderFlyoutOpen = value; RaisePropertyChanged(); }
+        }        
+        
+        public bool IsLASDataReaderFlyoutOpen
+        {
+            get => _isLASDataReaderFlyoutOpen;
+            set { _isLASDataReaderFlyoutOpen = value; RaisePropertyChanged(); }
         }
 
         public bool IsEVPathReaderFlyoutOpen
@@ -59,23 +75,32 @@ namespace FracVisualisationSoftware.ViewModels
         {
             get => _isEVStageReaderFlyoutOpen;
             set { _isEVStageReaderFlyoutOpen = value; RaisePropertyChanged(); }
+        }        
+        
+        public bool IsEVDataReaderFlyoutOpen
+        {
+            get => _isEVDataReaderFlyoutOpen;
+            set { _isEVDataReaderFlyoutOpen = value; RaisePropertyChanged(); }
         }
 
         #endregion
 
         public MainViewModel()
         {
-            MessengerInstance.Register<(FileTypeEnum, WellDataTypeEnum)>(this, FlyoutToggle);
+            MessengerInstance.Register<(FileTypeEnum, WellDataTypeEnum)>(this, ToggleReaderFlyouts);
         }
 
-        private void FlyoutToggle(ValueTuple<FileTypeEnum, WellDataTypeEnum> fileTuple)
+        private void ToggleReaderFlyouts(ValueTuple<FileTypeEnum, WellDataTypeEnum> fileTuple)
         {
             IsExcelPathReaderFlyoutOpen = fileTuple == (FileTypeEnum.Excel, WellDataTypeEnum.Path);
             IsExcelStageReaderFlyoutOpen = fileTuple == (FileTypeEnum.Excel, WellDataTypeEnum.Stages);
+            IsExcelDataReaderFlyoutOpen = fileTuple == (FileTypeEnum.Excel, WellDataTypeEnum.Data);
             IsLASPathReaderFlyoutOpen = fileTuple == (FileTypeEnum.LAS, WellDataTypeEnum.Path);
             IsLASStageReaderFlyoutOpen = fileTuple == (FileTypeEnum.LAS, WellDataTypeEnum.Stages);
+            IsLASDataReaderFlyoutOpen = fileTuple == (FileTypeEnum.LAS, WellDataTypeEnum.Data);
             IsEVPathReaderFlyoutOpen = fileTuple == (FileTypeEnum.EV, WellDataTypeEnum.Path);
             IsEVStageReaderFlyoutOpen = fileTuple == (FileTypeEnum.EV, WellDataTypeEnum.Stages);
+            IsEVDataReaderFlyoutOpen = fileTuple == (FileTypeEnum.EV, WellDataTypeEnum.Data);
         }
     }
 }

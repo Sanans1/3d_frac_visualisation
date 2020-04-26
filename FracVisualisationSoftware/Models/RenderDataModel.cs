@@ -7,9 +7,12 @@ using System.Windows.Media.Media3D;
 
 namespace FracVisualisationSoftware.Models
 {
-    public class StageModel
+    public class RenderDataModel
     {
-        public int StageNumber { get; set; }
+        public string Name { get; set; }
+        public string UnitOfMeasurement { get; set; }
+        public double Value { get; set; }
+        public string DisplayValue { get => $"{Value} {UnitOfMeasurement}"; }
         public Point3D Position { get; set; }
     }
 }

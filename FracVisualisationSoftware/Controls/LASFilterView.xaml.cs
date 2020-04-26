@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace FracVisualisationSoftware.Views
+namespace FracVisualisationSoftware.Controls
 {
     /// <summary>
-    /// Interaction logic for FileImportView.xaml
+    /// Interaction logic for ExcelFilterView.xaml
     /// </summary>
-    public partial class WellManagementView : UserControl
+    public partial class LASFilterView : UserControl
     {
-        public WellManagementView()
+        public LASFilterView()
         {
             InitializeComponent();
         }

@@ -19,6 +19,7 @@
         <Style TargetType="mah:Flyout">
             <Setter Property="Theme" Value="Adapt"/>
         </Style>
+        <local:BindableObjectReference x:Key="ViewportReference" Object="{Binding ElementName=Viewport}"/>
     </mah:MetroWindow.Resources>
     <Grid>
         <views:ViewportView/>
@@ -31,7 +32,7 @@
             </ToggleButton>
         </StackPanel>
         <mah:FlyoutsControl>
-            <mah:Flyout Header="Editor" Position="Right" IsOpen="{Binding IsChecked, ElementName=EditorButton, Mode=TwoWay}" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:MetroWindow}, Path=ActualWidth, Converter={converters1:MathConverter}, ConverterParameter=x/2}">
+            <mah:Flyout Name="RightFlyout" Header="Editor" Position="Right" IsOpen="{Binding IsChecked, ElementName=EditorButton, Mode=TwoWay}" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:MetroWindow}, Path=ActualWidth, Converter={converters1:MathConverter}, ConverterParameter=x/2}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -41,30 +42,39 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <views:BoreholeManagementView Grid.Row="0"/>
+                        <views:WellManagementView Grid.Row="0"/>
                     </Grid>
                 </ScrollViewer>
             </mah:Flyout>
-            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsExcelPathReaderFlyoutOpen}" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:MetroWindow}, Path=ActualWidth, Converter={converters1:MathConverter}, ConverterParameter=x/2}">
+            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsExcelPathReaderFlyoutOpen}" Width="{Binding ElementName=RightFlyout, Path=ActualWidth}">
                 <views:ExcelPathReaderView/>
-            </mah:Flyout>            
-            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsExcelStageReaderFlyoutOpen}" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:MetroWindow}, Path=ActualWidth, Converter={converters1:MathConverter}, ConverterParameter=x/2}">
+            </mah:Flyout>
+            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsExcelStageReaderFlyoutOpen}" Width="{Binding ElementName=RightFlyout, Path=ActualWidth}">
                 <views:ExcelStageReaderView/>
+            </mah:Flyout>            
+            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsExcelDataReaderFlyoutOpen}" Width="{Binding ElementName=RightFlyout, Path=ActualWidth}">
+                <views:ExcelDataReaderView/>
             </mah:Flyout>
-            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsLASPathReaderFlyoutOpen}" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:MetroWindow}, Path=ActualWidth, Converter={converters1:MathConverter}, ConverterParameter=x/2}">
+            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsLASPathReaderFlyoutOpen}" Width="{Binding ElementName=RightFlyout, Path=ActualWidth}">
                 <views:LASPathReaderView/>
-            </mah:Flyout>            
-            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsLASStageReaderFlyoutOpen}" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:MetroWindow}, Path=ActualWidth, Converter={converters1:MathConverter}, ConverterParameter=x/2}">
-                <views:LASStageReaderView/>
             </mah:Flyout>
-            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsEVPathReaderFlyoutOpen}" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:MetroWindow}, Path=ActualWidth, Converter={converters1:MathConverter}, ConverterParameter=x/2}">
-                <views:EVPathReaderView/>
+            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsLASStageReaderFlyoutOpen}" Width="{Binding ElementName=RightFlyout, Path=ActualWidth}">
+                <views:LASStageReaderView/>
             </mah:Flyout>            
-            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsEVStageReaderFlyoutOpen}" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:MetroWindow}, Path=ActualWidth, Converter={converters1:MathConverter}, ConverterParameter=x/2}">
+            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsLASDataReaderFlyoutOpen}" Width="{Binding ElementName=RightFlyout, Path=ActualWidth}">
+                <views:LASDataReaderView/>
+            </mah:Flyout>
+            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsEVPathReaderFlyoutOpen}" Width="{Binding ElementName=RightFlyout, Path=ActualWidth}">
+                <views:EVPathReaderView/>
+            </mah:Flyout>
+            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsEVStageReaderFlyoutOpen}" Width="{Binding ElementName=RightFlyout, Path=ActualWidth}">
                 <views:EVStageReaderView/>
+            </mah:Flyout>            
+            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsEVDataReaderFlyoutOpen}" Width="{Binding ElementName=RightFlyout, Path=ActualWidth}">
+                <views:EVDataReaderView/>
             </mah:Flyout>
             <mah:Flyout Position="Bottom" TitleVisibility="Collapsed" IsOpen="{Binding IsChecked, ElementName=TimerButton, Mode=TwoWay}" Height="150">
-
+                <views:TimelineView/>
             </mah:Flyout>
         </mah:FlyoutsControl>
     </Grid>

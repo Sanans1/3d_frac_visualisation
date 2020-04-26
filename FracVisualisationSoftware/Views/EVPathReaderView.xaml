@@ -5,45 +5,49 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FracVisualisationSoftware.Views"
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:controls="clr-namespace:FracVisualisationSoftware.Controls"
              mc:Ignorable="d" 
              DataContext="{Binding EvPathReader, Source={StaticResource Locator}}"
              mah:DialogParticipation.Register="{Binding}"
              d:DesignHeight="450" d:DesignWidth="400">
-    <GroupBox Header="EV Reader" BorderThickness="{StaticResource GroupBorder}">
-        <Grid IsSharedSizeScope="True">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+    <GroupBox Header="EV Path Reader" BorderThickness="{StaticResource GroupBorder}">
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" SharedSizeGroup="HeadingRow"/>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" SharedSizeGroup="HeadingRow"/>
-                <RowDefinition Height="Auto" SharedSizeGroup="HeadingRow"/>
-                <RowDefinition Height="Auto" SharedSizeGroup="HeadingRow"/>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
+            <Border Grid.Row="0">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" MaxHeight="700"/>
+                        </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="Name" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
-            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding NameText}" Margin="{StaticResource TypicalMargin}"/>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Name" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding NameText}" Margin="{StaticResource TypicalMargin}"/>
 
-            <TextBlock Grid.Column="0" Grid.Row="1" Text="Filter Column" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
-            <ComboBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Headings}" SelectedIndex="{Binding SelectedFilterColumnIndex}" Margin="{StaticResource TypicalMargin}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="1" Text="X Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
+                        <ComboBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Headings}" SelectedIndex="{Binding SelectedXHeadingIndex}" Margin="{StaticResource TypicalMargin}"/>
 
-            <TextBlock Grid.Row="2" Grid.Column="0" Text="Filter Text" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
-            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding FilterText}" Margin="{StaticResource TypicalMargin}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="2" Text="Y Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
+                        <ComboBox Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Headings}" SelectedIndex="{Binding SelectedYHeadingIndex}" Margin="{StaticResource TypicalMargin}"/>
 
-            <TextBlock Grid.Column="0" Grid.Row="3" Text="X Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
-            <ComboBox Grid.Column="1" Grid.Row="3" ItemsSource="{Binding Headings}" SelectedIndex="{Binding SelectedXHeadingIndex}" Margin="{StaticResource TypicalMargin}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="3" Text="Z Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
+                        <ComboBox Grid.Column="1" Grid.Row="3" ItemsSource="{Binding Headings}" SelectedIndex="{Binding SelectedZHeadingIndex}" Margin="{StaticResource TypicalMargin}"/>
 
-            <TextBlock Grid.Column="0" Grid.Row="4" Text="Y Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
-            <ComboBox Grid.Column="1" Grid.Row="4" ItemsSource="{Binding Headings}" SelectedIndex="{Binding SelectedYHeadingIndex}" Margin="{StaticResource TypicalMargin}"/>
-
-            <TextBlock Grid.Column="0" Grid.Row="5" Text="Z Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
-            <ComboBox Grid.Column="1" Grid.Row="5" ItemsSource="{Binding Headings}" SelectedIndex="{Binding SelectedZHeadingIndex}" Margin="{StaticResource TypicalMargin}"/>
-
-            <Button Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="6" Command="{Binding ReadEVFileCommand}" Content="Read" Margin="{StaticResource TypicalMargin}"/>
+                        <controls:EVFilterView Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}, Path=DataContext}"/>
+                    </Grid>
+                </ScrollViewer>
+            </Border>
+            <Button Grid.Row="1" Command="{Binding ReadEVFileCommand}" Content="Read" Margin="{StaticResource TypicalMargin}"/>
         </Grid>
     </GroupBox>
 </UserControl>

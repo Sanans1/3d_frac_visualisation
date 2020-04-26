@@ -80,6 +80,7 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="ReachFramework" />
     <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
     </Reference>
@@ -106,6 +107,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Printing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -129,37 +131,67 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BindableObjectReference.cs" />
+    <Compile Include="Controls\EVFilterView.xaml.cs">
+      <DependentUpon>EVFilterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\LASFilterView.xaml.cs">
+      <DependentUpon>LASFilterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ExcelFilterView.xaml.cs">
+      <DependentUpon>ExcelFilterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Converters\CollectionIndexConverter.cs" />
     <Compile Include="Converters\MathConverter.cs" />
     <Compile Include="Enums\FileTypeEnum.cs" />
     <Compile Include="Enums\WellDataTypeEnum.cs" />
     <Compile Include="Extensions\MathExtensionMethods.cs" />
+    <Compile Include="MessageTokenStrings.cs" />
+    <Compile Include="Models\DataSetModel.cs" />
+    <Compile Include="Models\DataValueModel.cs" />
+    <Compile Include="Models\Readers\LAS\LASFilterModel.cs" />
+    <Compile Include="Models\Readers\Excel\ExcelFilterModel.cs" />
     <Compile Include="Models\FlyoutMessageModel.cs" />
+    <Compile Include="Models\ModelBase.cs" />
+    <Compile Include="Models\Readers\EV\EVFilterModel.cs" />
+    <Compile Include="Models\RenderDataModel.cs" />
     <Compile Include="Models\WellModel.cs" />
-    <Compile Include="Models\LASInformationModel.cs" />
-    <Compile Include="Models\LASSectionModel.cs" />
+    <Compile Include="Models\Readers\LAS\LASInformationModel.cs" />
+    <Compile Include="Models\Readers\LAS\LASSectionModel.cs" />
     <Compile Include="Models\StageModel.cs" />
-    <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="Properties\Annotations1.cs" />
     <Compile Include="Services\Implementations\Data\DataService.cs" />
     <Compile Include="Services\Interfaces\Data\IDataService.cs" />
     <Compile Include="Services\Implementations\Parsing\ExcelParsingService.cs" />
     <Compile Include="Services\Implementations\Parsing\LASParsingService.cs" />
     <Compile Include="Services\Implementations\Parsing\OtherParsingService.cs" />
     <Compile Include="ViewModelLocator.cs" />
-    <Compile Include="ViewModels\BoreholeManagementViewModel.cs" />
-    <Compile Include="ViewModels\EVStageReaderViewModel.cs" />
-    <Compile Include="ViewModels\EVPathReaderViewModel.cs" />
-    <Compile Include="ViewModels\ExcelStageReaderViewModel.cs" />
-    <Compile Include="ViewModels\LASStageReaderViewModel.cs" />
-    <Compile Include="ViewModels\LASPathReaderViewModel.cs" />
-    <Compile Include="ViewModels\ExcelPathReaderViewModel.cs" />
+    <Compile Include="ViewModels\WellManagementViewModel.cs" />
+    <Compile Include="ViewModels\Readers\EV\EVDataReaderViewModel.cs" />
+    <Compile Include="ViewModels\Readers\EV\EVReaderViewModelBase.cs" />
+    <Compile Include="ViewModels\Readers\EV\EVStageReaderViewModel.cs" />
+    <Compile Include="ViewModels\Readers\EV\EVPathReaderViewModel.cs" />
+    <Compile Include="ViewModels\Readers\Excel\ExcelDataReaderViewModel.cs" />
+    <Compile Include="ViewModels\Readers\Excel\ExcelReaderViewModelBase.cs" />
+    <Compile Include="ViewModels\Readers\Excel\ExcelStageReaderViewModel.cs" />
+    <Compile Include="ViewModels\Readers\LAS\LASDataReaderViewModel.cs" />
+    <Compile Include="ViewModels\Readers\LAS\LASReaderViewModelBase.cs" />
+    <Compile Include="ViewModels\Readers\LAS\LASStageReaderViewModel.cs" />
+    <Compile Include="ViewModels\Readers\LAS\LASPathReaderViewModel.cs" />
+    <Compile Include="ViewModels\Readers\Excel\ExcelPathReaderViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\TimelineViewModel.cs" />
     <Compile Include="ViewModels\ViewportViewModel.cs" />
+    <Compile Include="Views\EVDataReaderView.xaml.cs">
+      <DependentUpon>EVDataReaderView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EVStageReaderView.xaml.cs">
       <DependentUpon>EVStageReaderView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EVPathReaderView.xaml.cs">
       <DependentUpon>EVPathReaderView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ExcelDataReaderView.xaml.cs">
+      <DependentUpon>ExcelDataReaderView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ExcelStageReaderView.xaml.cs">
       <DependentUpon>ExcelStageReaderView.xaml</DependentUpon>
@@ -167,8 +199,14 @@
     <Compile Include="Views\ExcelPathReaderView.xaml.cs">
       <DependentUpon>ExcelPathReaderView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\BoreholeManagementView.xaml.cs">
-      <DependentUpon>BoreholeManagementView.xaml</DependentUpon>
+    <Compile Include="Views\TimelineView.xaml.cs">
+      <DependentUpon>TimelineView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WellManagementView.xaml.cs">
+      <DependentUpon>WellManagementView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LASDataReaderView.xaml.cs">
+      <DependentUpon>LASDataReaderView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LASStageReaderView.xaml.cs">
       <DependentUpon>LASStageReaderView.xaml</DependentUpon>
@@ -179,6 +217,18 @@
     <Compile Include="Views\ViewportView.xaml.cs">
       <DependentUpon>ViewportView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\EVFilterView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\LASFilterView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\ExcelFilterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -191,6 +241,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\EVDataReaderView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\EVStageReaderView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -198,6 +252,10 @@
     <Page Include="Views\EVPathReaderView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ExcelDataReaderView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ExcelStageReaderView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -207,9 +265,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\BoreholeManagementView.xaml">
+    <Page Include="Views\TimelineView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WellManagementView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LASDataReaderView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\LASStageReaderView.xaml">
       <Generator>MSBuild:Compile</Generator>
