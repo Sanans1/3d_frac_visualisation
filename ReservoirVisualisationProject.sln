@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28917.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReservoirVisualisationProject", "ReservoirVisualisationProject\ReservoirVisualisationProject.csproj", "{F320AFB6-86D9-4E6D-830D-97EE9791CDCC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReservoirVisualisationProject.Tests", "ReservoirVisualisationProject.Tests\ReservoirVisualisationProject.Tests.csproj", "{C9C14997-EDCD-4A0C-BCD6-500F1B458371}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F320AFB6-86D9-4E6D-830D-97EE9791CDCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F320AFB6-86D9-4E6D-830D-97EE9791CDCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F320AFB6-86D9-4E6D-830D-97EE9791CDCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F320AFB6-86D9-4E6D-830D-97EE9791CDCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9C14997-EDCD-4A0C-BCD6-500F1B458371}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9C14997-EDCD-4A0C-BCD6-500F1B458371}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9C14997-EDCD-4A0C-BCD6-500F1B458371}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9C14997-EDCD-4A0C-BCD6-500F1B458371}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {54665D86-987F-4280-AB60-2C879BF78544}
+	EndGlobalSection
+EndGlobal

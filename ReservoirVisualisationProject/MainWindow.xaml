@@ -1,0 +1,94 @@
+﻿<mah:MetroWindow x:Class="ReservoirVisualisationProject.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ReservoirVisualisationProject"
+        xmlns:h="http://helix-toolkit.org/wpf"
+        xmlns:views="clr-namespace:ReservoirVisualisationProject.Views"
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:converters="http://metro.mahapps.com/winfx/xaml/shared"
+        xmlns:converters1="clr-namespace:ReservoirVisualisationProject.Converters"
+        mc:Ignorable="d"
+        GlowBrush="{DynamicResource AccentColorBrush}"
+        Title="Reservoir Visualisation Project" 
+        DataContext="{Binding Main, Source={StaticResource Locator}}"
+        Height="450" Width="800">
+    <mah:MetroWindow.Resources>
+        <Style TargetType="mah:Flyout">
+            <Setter Property="Theme" Value="Adapt"/>
+        </Style>
+    </mah:MetroWindow.Resources>
+    <Grid>
+        <views:ViewportView/>
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="30, 20">
+            <ToggleButton x:Name="TimerButton" Style="{DynamicResource MaterialDesignFlatPrimaryToggleButton}" Width="55" Height="55">
+                <materialDesign:PackIcon Kind="Timer" Width="40" Height="40"/>
+            </ToggleButton>
+            <ToggleButton x:Name="EditorButton" Style="{DynamicResource MaterialDesignFlatPrimaryToggleButton}" IsChecked="True" Margin="10,0,0,0" Width="55" Height="55">
+                <materialDesign:PackIcon Kind="Edit" Width="40" Height="40"/>
+            </ToggleButton>
+        </StackPanel>
+        <mah:FlyoutsControl>
+            <mah:Flyout Name="RightFlyout" Header="Editor" Position="Right" IsOpen="{Binding IsChecked, ElementName=EditorButton, Mode=TwoWay}" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:MetroWindow}, Path=ActualWidth, Converter={converters1:MathConverter}, ConverterParameter=x/2}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <views:WellManagementView Grid.Row="0"/>
+                    </Grid>
+                </ScrollViewer>
+            </mah:Flyout>
+            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsExcelPathReaderFlyoutOpen}" Width="{Binding ElementName=RightFlyout, Path=ActualWidth}">
+                <views:ExcelPathReaderView/>
+            </mah:Flyout>
+            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsExcelStageReaderFlyoutOpen}" Width="{Binding ElementName=RightFlyout, Path=ActualWidth}">
+                <views:ExcelStageReaderView/>
+            </mah:Flyout>            
+            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsExcelDataReaderFlyoutOpen}" Width="{Binding ElementName=RightFlyout, Path=ActualWidth}">
+                <views:ExcelDataReaderView/>
+            </mah:Flyout>
+            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsLASPathReaderFlyoutOpen}" Width="{Binding ElementName=RightFlyout, Path=ActualWidth}">
+                <views:LASPathReaderView/>
+            </mah:Flyout>
+            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsLASStageReaderFlyoutOpen}" Width="{Binding ElementName=RightFlyout, Path=ActualWidth}">
+                <views:LASStageReaderView/>
+            </mah:Flyout>            
+            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsLASDataReaderFlyoutOpen}" Width="{Binding ElementName=RightFlyout, Path=ActualWidth}">
+                <views:LASDataReaderView/>
+            </mah:Flyout>
+            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsEVPathReaderFlyoutOpen}" Width="{Binding ElementName=RightFlyout, Path=ActualWidth}">
+                <views:EVPathReaderView/>
+            </mah:Flyout>
+            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsEVStageReaderFlyoutOpen}" Width="{Binding ElementName=RightFlyout, Path=ActualWidth}">
+                <views:EVStageReaderView/>
+            </mah:Flyout>            
+            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsEVDataReaderFlyoutOpen}" Width="{Binding ElementName=RightFlyout, Path=ActualWidth}">
+                <views:EVDataReaderView/>
+            </mah:Flyout>
+            <mah:Flyout Position="Bottom" TitleVisibility="Collapsed" IsOpen="{Binding IsChecked, ElementName=TimerButton, Mode=TwoWay}" CloseButtonVisibility="Collapsed">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <ToggleButton Grid.Column="0" VerticalAlignment="Stretch" Margin="{StaticResource TypicalMargin}" IsChecked="{Binding IsChecked, ElementName=TimerButton, Mode=TwoWay}">
+                        <ToggleButton.Style>
+                            <Style TargetType="ToggleButton" BasedOn="{StaticResource MahApps.Metro.Styles.MetroButton}"/>
+                        </ToggleButton.Style>
+                        <materialDesign:PackIcon Kind="ArrowDownBold" Height="22" Width="22" />
+                    </ToggleButton>
+
+                    <views:TimelineView Grid.Column="1"/>
+                </Grid>
+            </mah:Flyout>
+        </mah:FlyoutsControl>
+    </Grid>
+</mah:MetroWindow>

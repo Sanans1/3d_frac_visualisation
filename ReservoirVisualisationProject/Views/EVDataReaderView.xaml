@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="ReservoirVisualisationProject.Views.EVDataReaderView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ReservoirVisualisationProject.Views"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:controls="clr-namespace:ReservoirVisualisationProject.Controls"
+             mc:Ignorable="d" 
+             DataContext="{Binding EvDataReader, Source={StaticResource Locator}}"
+             mah:DialogParticipation.Register="{Binding}"
+             d:DesignHeight="450" d:DesignWidth="400">
+    <GroupBox Header="EV Data Reader" BorderThickness="{StaticResource GroupBorder}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" MaxHeight="700"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Data Name" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding DataName}" Margin="{StaticResource TypicalMargin}"/>
+                        
+                        <TextBlock Grid.Column="0" Grid.Row="1" Text="Unit of Measurement" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding DataUnitOfMeasurement}" Margin="{StaticResource TypicalMargin}"/>
+
+                        <TextBlock Grid.Column="0" Grid.Row="2" Text="Data Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
+                        <ComboBox Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Headings}" SelectedIndex="{Binding SelectedDataHeadingIndex}" Margin="{StaticResource TypicalMargin}"/>
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Stage Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
+                        <ComboBox Grid.Column="1" Grid.Row="3" ItemsSource="{Binding Headings}" SelectedIndex="{Binding SelectedStageHeadingIndex}" Margin="{StaticResource TypicalMargin}"/>                        
+                        
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="Timestamp Column Heading" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}"/>
+                        <ComboBox Grid.Column="1" Grid.Row="4" ItemsSource="{Binding Headings}" SelectedIndex="{Binding SelectedTimestampHeadingIndex}" Margin="{StaticResource TypicalMargin}"/>
+
+                        <controls:EVFilterView Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}, Path=DataContext}"/>
+                    </Grid>
+                </ScrollViewer>
+            </Border>
+            <Button Grid.Row="1" Command="{Binding ReadEVFileCommand}" Content="Read" Margin="{StaticResource TypicalMargin}"/>
+        </Grid>
+    </GroupBox>
+</UserControl>

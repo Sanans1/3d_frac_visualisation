@@ -1,0 +1,92 @@
+﻿<UserControl x:Class="ReservoirVisualisationProject.Views.TimelineView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ReservoirVisualisationProject.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:h="http://helix-toolkit.org/wpf"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             mc:Ignorable="d" 
+             DataContext="{Binding Timeline, Source={StaticResource Locator}}"
+             d:DesignHeight="100" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Slider Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}" Value="{Binding SliderPosition}" Maximum="{Binding SliderCap}"/>
+
+        <Grid Grid.Column="0" Grid.Row="1" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="1" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}" Command="{Binding BackwardCommand}">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource MahApps.Metro.Styles.MetroCircleButtonStyle}"/>
+                </Button.Style>
+                <materialDesign:PackIcon Kind="Rewind" Height="22" Width="22" Margin="{StaticResource TypicalMargin}"/>
+            </Button>
+
+            <Button Grid.Column="2" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}" Command="{Binding PlayCommand}">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource MahApps.Metro.Styles.MetroCircleButtonStyle}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsPlaying}" Value="True">
+                                <Setter Property="Content">
+                                    <Setter.Value>
+                                        <materialDesign:PackIcon Kind="Pause" Height="33" Width="33" Margin="{StaticResource TypicalMargin}"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsPlaying}" Value="False">
+                                <Setter Property="Content">
+                                    <Setter.Value>
+                                        <materialDesign:PackIcon Kind="Play" Height="33" Width="33" Margin="{StaticResource TypicalMargin}"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+
+            <Button Grid.Column="3" VerticalAlignment="Center" Margin="{StaticResource TypicalMargin}" Command="{Binding ForwardCommand}">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource MahApps.Metro.Styles.MetroCircleButtonStyle}"/>
+                </Button.Style>
+                <materialDesign:PackIcon Kind="FastForward" Height="22" Width="22" Margin="{StaticResource TypicalMargin}"/>
+            </Button>
+
+            <StackPanel HorizontalAlignment="Right" Grid.Column="4" mah:VisibilityHelper.IsVisible="{Binding HasTimestamps}"> 
+                <StackPanel Orientation="Horizontal" >
+                    <TextBlock Text="{Binding CurrentTimestamp}"/>
+                    <TextBlock Text="  /  "/>
+                    <TextBlock Text="{Binding LastTimestamp}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" >
+                    <TextBlock Text="Speed:" Margin="{StaticResource TypicalMargin}" VerticalAlignment="Center"/>
+                    <TextBox Text="{Binding TimerInterval}" Margin="{StaticResource TypicalMargin}" Width="75"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <Button Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Stretch" Margin="{StaticResource TypicalMargin}" Command="{Binding ScreenshotCommand}">
+            <Button.Style>
+                <Style TargetType="Button" BasedOn="{StaticResource MahApps.Metro.Styles.MetroButton}"/>
+            </Button.Style>
+            <materialDesign:PackIcon Kind="Camera" Height="22" Width="22" />
+        </Button>
+    </Grid>
+</UserControl>
