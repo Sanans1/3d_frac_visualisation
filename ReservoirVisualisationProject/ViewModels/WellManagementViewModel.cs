@@ -41,7 +41,12 @@ namespace ReservoirVisualisationProject.ViewModels
         public ObservableCollection<WellModel> WellModels
         {
             get { return _wellModels; }
-            set { _wellModels = value; RaisePropertyChanged(); }
+            set
+            {
+                _wellModels = value; 
+                RaisePropertyChanged();
+                RaisePropertyChanged(() => WellsExist);
+            }
         }
 
         public int SelectedWellIndex
@@ -57,6 +62,8 @@ namespace ReservoirVisualisationProject.ViewModels
 
         public bool WellIsSelected => SelectedWellIndex > -1 && SelectedWellIndex < WellModels.Count;
 
+        public bool WellsExist => WellModels.Any();
+
         #endregion
 
         #region constructor
@@ -68,7 +75,7 @@ namespace ReservoirVisualisationProject.ViewModels
 
             WellModels = new ObservableCollection<WellModel>();
 
-            SaveWellCommand = new RelayCommand(SaveWellAction);
+            SaveWellCommand = new RelayCommand(SaveWellAction, () => WellsExist);
             LoadWellCommand = new RelayCommand(LoadWellAction);
             AddWellCommand = new RelayCommand(() => AddAction(WellDataTypeEnum.Path));
             RemoveWellCommand = new RelayCommand(() => RemoveAction(WellDataTypeEnum.Path, SelectedWellIndex), () => WellIsSelected);

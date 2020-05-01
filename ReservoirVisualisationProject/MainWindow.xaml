@@ -22,28 +22,20 @@
     </mah:MetroWindow.Resources>
     <Grid>
         <views:ViewportView/>
+        <ToggleButton x:Name="InstructionButton" Style="{DynamicResource MaterialDesignFlatPrimaryToggleButton}" IsChecked="True" Width="55" Height="55" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30, 20">
+            <materialDesign:PackIcon Kind="QuestionMark" Width="40" Height="40"/>
+        </ToggleButton>
         <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="30, 20">
-            <ToggleButton x:Name="TimerButton" Style="{DynamicResource MaterialDesignFlatPrimaryToggleButton}" Width="55" Height="55">
+            <ToggleButton x:Name="TimelineButton" Style="{DynamicResource MaterialDesignFlatPrimaryToggleButton}" Width="55" Height="55">
                 <materialDesign:PackIcon Kind="Timer" Width="40" Height="40"/>
             </ToggleButton>
-            <ToggleButton x:Name="EditorButton" Style="{DynamicResource MaterialDesignFlatPrimaryToggleButton}" IsChecked="True" Margin="10,0,0,0" Width="55" Height="55">
+            <ToggleButton x:Name="ManagementButton" Style="{DynamicResource MaterialDesignFlatPrimaryToggleButton}" IsChecked="True" Margin="10,0,0,0" Width="55" Height="55">
                 <materialDesign:PackIcon Kind="Edit" Width="40" Height="40"/>
             </ToggleButton>
         </StackPanel>
         <mah:FlyoutsControl>
-            <mah:Flyout Name="RightFlyout" Header="Editor" Position="Right" IsOpen="{Binding IsChecked, ElementName=EditorButton, Mode=TwoWay}" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:MetroWindow}, Path=ActualWidth, Converter={converters1:MathConverter}, ConverterParameter=x/2}">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-
-                        <views:WellManagementView Grid.Row="0"/>
-                    </Grid>
-                </ScrollViewer>
+            <mah:Flyout Name="RightFlyout" TitleVisibility="Collapsed" Position="Right" IsOpen="{Binding IsChecked, ElementName=ManagementButton, Mode=TwoWay}" Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:MetroWindow}, Path=ActualWidth, Converter={converters1:MathConverter}, ConverterParameter=x/2}">
+                <views:WellManagementView/>
             </mah:Flyout>
             <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsExcelPathReaderFlyoutOpen}" Width="{Binding ElementName=RightFlyout, Path=ActualWidth}">
                 <views:ExcelPathReaderView/>
@@ -72,14 +64,25 @@
             <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsEVDataReaderFlyoutOpen}" Width="{Binding ElementName=RightFlyout, Path=ActualWidth}">
                 <views:EVDataReaderView/>
             </mah:Flyout>
-            <mah:Flyout Position="Bottom" TitleVisibility="Collapsed" IsOpen="{Binding IsChecked, ElementName=TimerButton, Mode=TwoWay}" CloseButtonVisibility="Collapsed">
+            <mah:Flyout Position="Left" TitleVisibility="Collapsed" IsOpen="{Binding IsChecked, ElementName=InstructionButton, Mode=TwoWay}" Width="{Binding ElementName=RightFlyout, Path=ActualWidth}">
+                <GroupBox Header="Viewport Instructions" BorderThickness="{StaticResource GroupBorder}">
+                    <StackPanel Margin="{StaticResource TypicalMargin}">
+                        <TextBlock Text="Hold the right mouse button to rotate." Margin="{StaticResource TypicalMargin}"/>
+                        <TextBlock Text="Hold the middle mouse button to pan." Margin="{StaticResource TypicalMargin}"/>
+                        <TextBlock Text="Double click the middle mouse button to centre the camera on the model." TextWrapping="Wrap" Margin="{StaticResource TypicalMargin}"/>
+                        <TextBlock Text="Scroll the mouse wheel in to zoom in." Margin="{StaticResource TypicalMargin}"/>
+                        <TextBlock Text="Scroll the mouse wheel out to zoom out." Margin="{StaticResource TypicalMargin}"/>
+                    </StackPanel>
+                </GroupBox>
+            </mah:Flyout>
+            <mah:Flyout Position="Bottom" TitleVisibility="Collapsed" IsOpen="{Binding IsChecked, ElementName=TimelineButton, Mode=TwoWay}" CloseButtonVisibility="Collapsed">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <ToggleButton Grid.Column="0" VerticalAlignment="Stretch" Margin="{StaticResource TypicalMargin}" IsChecked="{Binding IsChecked, ElementName=TimerButton, Mode=TwoWay}">
+                    <ToggleButton Grid.Column="0" VerticalAlignment="Stretch" Margin="{StaticResource TypicalMargin}" IsChecked="{Binding IsChecked, ElementName=TimelineButton, Mode=TwoWay}">
                         <ToggleButton.Style>
                             <Style TargetType="ToggleButton" BasedOn="{StaticResource MahApps.Metro.Styles.MetroButton}"/>
                         </ToggleButton.Style>
