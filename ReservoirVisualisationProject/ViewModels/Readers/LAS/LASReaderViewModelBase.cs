@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Threading;
 using ReservoirVisualisationProject.Models;
 using ReservoirVisualisationProject.Models.Readers.LAS;
 using GalaSoft.MvvmLight;
@@ -149,7 +150,7 @@ namespace ReservoirVisualisationProject.ViewModels.Readers.LAS
 
         protected virtual void ResetProperties()
         {
-            Application.Current.Dispatcher?.InvokeAsync(() =>
+            Dispatcher.CurrentDispatcher.InvokeAsync(() =>
             {
                 Sections = new ObservableCollection<LASSectionModel>();
                 Headings = new ObservableCollection<LASInformationModel>();

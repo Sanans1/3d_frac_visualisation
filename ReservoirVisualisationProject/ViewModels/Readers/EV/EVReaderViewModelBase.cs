@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Threading;
 using ReservoirVisualisationProject.Models;
 using ReservoirVisualisationProject.Models.Readers.EV;
 using GalaSoft.MvvmLight;
@@ -26,7 +27,7 @@ namespace ReservoirVisualisationProject.ViewModels.Readers.EV
         
         protected List<string> _content;
 
-        private object _headingCollectionLock;
+        private readonly object _headingCollectionLock;
         private ObservableCollection<string> _headings;
 
         private ObservableCollection<EVFilterModel> _evFilterModels;
@@ -104,7 +105,7 @@ namespace ReservoirVisualisationProject.ViewModels.Readers.EV
 
         protected virtual void ResetProperties()
         {
-            Application.Current.Dispatcher?.InvokeAsync(() =>
+            Dispatcher.CurrentDispatcher.InvokeAsync(() =>
             {
                 _content = new List<string>();
                 Headings = new ObservableCollection<string>();

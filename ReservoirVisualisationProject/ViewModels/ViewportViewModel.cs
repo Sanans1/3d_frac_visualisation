@@ -113,7 +113,7 @@ namespace ReservoirVisualisationProject.ViewModels
             if (wellModel == null || !wellModel.Path.Any())
                 return;
 
-            Application.Current.Dispatcher?.InvokeAsync(() =>
+            Dispatcher.CurrentDispatcher.InvokeAsync(() =>
             {
                 //Reset the lighting
                 ViewportObjects.Remove(ViewportObjects.SingleOrDefault(sunLight => sunLight.GetName() == "Light"));
@@ -144,7 +144,7 @@ namespace ReservoirVisualisationProject.ViewModels
 
         private void AddDataMessageCallback(List<RenderDataModel> renderDataModels)
         {
-            Application.Current.Dispatcher?.InvokeAsync(() =>
+            Dispatcher.CurrentDispatcher.InvokeAsync(() =>
             {
                 //Add each data point
                 foreach (RenderDataModel renderDataModel in renderDataModels)

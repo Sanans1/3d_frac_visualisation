@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 namespace ReservoirVisualisationProject.Controls
 {
     /// <summary>
-    /// Interaction logic for ExcelFilterView.xaml
+    /// Interaction logic for LASFilterView.xaml
     /// </summary>
     public partial class LASFilterView : UserControl
     {

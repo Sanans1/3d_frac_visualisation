@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 namespace ReservoirVisualisationProject.Controls
 {
     /// <summary>
-    /// Interaction logic for ExcelFilterView.xaml
+    /// Interaction logic for EVFilterView.xaml
     /// </summary>
     public partial class EVFilterView : UserControl
     {

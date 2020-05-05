@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 namespace ReservoirVisualisationProject.Views
 {
     /// <summary>
-    /// Interaction logic for FileImportView.xaml
+    /// Interaction logic for WellManagementView.xaml
     /// </summary>
     public partial class WellManagementView : UserControl
     {

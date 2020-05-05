@@ -26,8 +26,8 @@ namespace ReservoirVisualisationProject.ViewModels
 
         #region injected fields
 
-        private IDialogCoordinator _dialogCoordinator;
-        private IDataService _dataService;
+        private readonly IDialogCoordinator _dialogCoordinator;
+        private readonly IDataService _dataService;
 
         #endregion
 
@@ -111,9 +111,7 @@ namespace ReservoirVisualisationProject.ViewModels
 
         private void SaveWellAction()
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Text Files|*.txt";
-            saveFileDialog.Title = "Select a file to save well data to.";
+            SaveFileDialog saveFileDialog = new SaveFileDialog { Filter = "Text Files|*.txt", Title = "Select a file to save well data to." };
 
             if (saveFileDialog.ShowDialog() == true)
             {
@@ -127,9 +125,7 @@ namespace ReservoirVisualisationProject.ViewModels
 
             await Task.Run(async () =>
             {
-                OpenFileDialog openFileDialog = new OpenFileDialog();
-                openFileDialog.Filter = "Text Files|*.txt";
-                openFileDialog.Title = "Select a file to load well data from.";
+                OpenFileDialog openFileDialog = new OpenFileDialog {Filter = "Text Files|*.txt", Title = "Select a file to load well data from."};
 
                 if (openFileDialog.ShowDialog() == true)
                 {
@@ -161,15 +157,15 @@ namespace ReservoirVisualisationProject.ViewModels
             ProgressDialogController progressDialogController = await _dialogCoordinator.ShowProgressAsync(this, "Please wait...", "Awaiting user to select file...");
 
             await Task.Run(async () =>
-            { 
-                OpenFileDialog openFileDialog = new OpenFileDialog();
-                openFileDialog.Filter = "All files|*.*|All Excel Files|*.xls;*.xlsx;*.xlsm|LAS Files|*.las|DAT Files|*.dat|PATH Files|*.path|PDAT Files|*.pdat|PROD Files|*.prod|TOPS Files|*.tops";
-                openFileDialog.Title = "Select a file to import path data from.";
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog
+                {
+                    Filter = "All files|*.*|All Excel Files|*.xls;*.xlsx;*.xlsm|LAS Files|*.las|DAT Files|*.dat|PATH Files|*.path|PDAT Files|*.pdat|PROD Files|*.prod|TOPS Files|*.tops",
+                    Title = "Select a file to import path data from."
+                };
 
                 if (openFileDialog.ShowDialog() == true)
                 {
-                    await progressDialogController.CloseAsync();
-
                     string extension = Path.GetExtension(openFileDialog.FileName);
 
                     FlyoutMessageModel flyoutMessage = new FlyoutMessageModel
@@ -199,6 +195,8 @@ namespace ReservoirVisualisationProject.ViewModels
                             throw new InvalidOperationException();
                     }
                 }
+
+                await progressDialogController.CloseAsync();
             });
         }
 

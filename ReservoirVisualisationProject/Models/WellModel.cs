@@ -38,7 +38,7 @@ namespace ReservoirVisualisationProject.Models
             }
         }
 
-        public bool HasStages => Stages.Any();
+        public bool HasStages => Stages != null && Stages.Any();
 
         public ObservableCollection<DataSetModel> DataSets
         {

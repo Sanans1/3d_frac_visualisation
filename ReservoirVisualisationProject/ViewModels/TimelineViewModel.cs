@@ -143,9 +143,7 @@ namespace ReservoirVisualisationProject.ViewModels
 
         private void CreateScreenshot(HelixViewport3D helixViewport3D)
         {
-            SaveFileDialog openFileDialog = new SaveFileDialog();
-            openFileDialog.Filter = "PNG files|*.png*";
-            openFileDialog.Title = "Save as";
+            SaveFileDialog openFileDialog = new SaveFileDialog {Filter = "PNG files|*.png*", Title = "Save as"};
 
             if (openFileDialog.ShowDialog() == true)
             {
