@@ -153,7 +153,7 @@ namespace ReservoirVisualisationProject.ViewModels.Readers.Excel
 
         protected virtual void ResetProperties()
         {
-            Dispatcher.CurrentDispatcher.InvokeAsync(() =>
+            Application.Current.Dispatcher.InvokeAsync(() =>
             {
                 _excelApplication = null;
                 _excelWorkbook = null;

@@ -150,7 +150,7 @@ namespace ReservoirVisualisationProject.ViewModels.Readers.LAS
 
         protected virtual void ResetProperties()
         {
-            Dispatcher.CurrentDispatcher.InvokeAsync(() =>
+            Application.Current.Dispatcher.InvokeAsync(() =>
             {
                 Sections = new ObservableCollection<LASSectionModel>();
                 Headings = new ObservableCollection<LASInformationModel>();

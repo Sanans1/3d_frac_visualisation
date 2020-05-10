@@ -105,7 +105,7 @@ namespace ReservoirVisualisationProject.ViewModels.Readers.EV
 
         protected virtual void ResetProperties()
         {
-            Dispatcher.CurrentDispatcher.InvokeAsync(() =>
+            Application.Current.Dispatcher.InvokeAsync(() =>
             {
                 _content = new List<string>();
                 Headings = new ObservableCollection<string>();
