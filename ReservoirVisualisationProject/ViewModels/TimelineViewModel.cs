@@ -60,7 +60,7 @@ namespace ReservoirVisualisationProject.ViewModels
             }
         }
 
-        public int SliderCap => _timestamps.Count;
+        public int SliderCap => _timestamps.Count - 1;
 
         public int SliderPosition
         {
